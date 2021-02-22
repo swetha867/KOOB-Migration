@@ -17,12 +17,9 @@
 //   StatusBar,
 // } from 'react-native';
 
-
 // import { Provider } from 'react-redux';
 // import { createStore } from 'redux';
 // import { connect } from "react-redux";
-
-
 
 // // import { NativeRouter, Route, Link,Switch } from "react-router-native";
 // import { ReactDOM, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
@@ -37,22 +34,18 @@
 
 import React from 'react';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import Router from './Root';
 import configureStore from './configureStore';
-
 
 const store = configureStore();
 
 export default class App extends React.Component {
-  render () {
-
+  render() {
     return (
       <Provider store={store}>
-        <Router/>
-        </Provider>
-    );  
-    
+        <Router />
+      </Provider>
+    );
   }
-  
 }

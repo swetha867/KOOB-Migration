@@ -1,35 +1,23 @@
-import React, { Component, useRef } from 'react';
-import { connect } from 'react-redux';
-import { createStore } from 'redux';
-import { Actions } from 'react-native-router-flux';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
 import {
+  Button,
   Container,
-  Header,
+  Content,
   Footer,
   FooterTab,
-  Button,
-  Text,
-  Body,
-  Form,
+  Header,
+  Input,
+  Item as FormItem,
   Left,
   Right,
-  Content,
-  Item as FormItem,
-  Input,
-  Label,
-  Title,
-  View,
+  Text,
 } from 'native-base';
-import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+import React, {useRef} from 'react';
+import DocumentPicker from 'react-native-document-picker';
+import {Actions} from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {connect} from 'react-redux';
 
-
-const Home = ({
-
-  isLoggedIn,
-  dispatch,
-}) => {
+const Home = ({isLoggedIn, dispatch}) => {
   const [books, setBooks] = React.useState([]);
   React.useEffect(() => {
     // clickForSearch("");
@@ -37,7 +25,7 @@ const Home = ({
   const book = null;
   const webview = useRef();
 
-  bookChooser = (e) => {
+  const bookChooser = (e) => {
     // console.log("hello")
     // var firstFile = e;
     // alert(firstFile)
@@ -47,31 +35,24 @@ const Home = ({
     //         book = ePub({
     //             bookPath: e.target.result
     //         });
-
     //         book.renderTo("area");
     //         /* Replace area with the id for your div to put the book in */
     //     }.bind(this);
-
     //     reader.readAsArrayBuffer(firstFile);
-
     // } else {
     //     alert("Your browser does not support the required features. Please use a modern browser such as Google Chrome, or Mozilla Firefox");
     // }
   };
 
-
-
-  prev = () => {
+  const prev = () => {
     book.prevPage();
-  }
+  };
 
-  next = () => {
+  const next = () => {
     book.nextPage();
-  }
+  };
 
-
-
-  handleFilePicker = async () => {
+  const handleFilePicker = async () => {
     // console.log(bookSearch)
 
     try {
@@ -82,7 +63,7 @@ const Home = ({
         res.uri,
         res.type, // mime type
         res.name,
-        res.size
+        res.size,
       );
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -91,15 +72,9 @@ const Home = ({
         throw err;
       }
     }
+  };
 
-
-  }
-
-
-
-
-
-  _pickDocument = async () => {
+  const _pickDocument = async () => {
     // let result = await DocumentPicker.getDocumentAsync({});
     // // need to verify whether doc is epub
     // var slash_index = result.name.lastIndexOf("/") + 1;
@@ -109,89 +84,81 @@ const Home = ({
     // var linkname = result.uri;
     // var bname = toTitleCase(onlyname);
     // db.transaction(tx => {
-
     //   tx.executeSql(
     //     'CREATE TABLE IF NOT EXISTS BooksTable (book_id INTEGER PRIMARY KEY AUTOINCREMENT,name, link, flag, author,imgpath)'
-    //     )    
+    //     )
     //     tx.executeSql('INSERT INTO BooksTable VALUES (?,?,?,?,?)', [bname,
     //       linkname, 0, '', '']);
     //      // console.log(result);
     //     })
-
-
-
     //   }
     //   function toTitleCase(str) {
     //     return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
     //   }
-
     // const ebook =() => {
     //   return (
     //     <Epub src={"https://s3.amazonaws.com/epubjs/books/moby-dick/OPS/package.opf"}
     //     flow={"paginated"} />
-
     //   )}
-
-  }
+  };
   return (
     <Container>
-      <Header style={{ backgroundColor: 'black' }}>
-
+      <Header style={{backgroundColor: 'black'}}>
         <Left>
-
-          <Icon.Button name='cog' dark backgroundColor="black">
-            <Text style={{ color: "white" }}>Settings</Text>
+          <Icon.Button name="cog" dark backgroundColor="black">
+            <Text style={{color: 'white'}}>Settings</Text>
           </Icon.Button>
         </Left>
         {/* <Body>
-          <Text  style={{ color: "white"}}> HOME </Text>  
+          <Text  style={{ color: "white"}}> HOME </Text>
           </Body> */}
         <Right>
-          <Icon.Button name='plus' onPress={handleFilePicker} dark backgroundColor="black">
-            <Text style={{ color: "white" }}>Add Books</Text>
+          <Icon.Button
+            name="plus"
+            onPress={handleFilePicker}
+            dark
+            backgroundColor="black">
+            <Text style={{color: 'white'}}>Add Books</Text>
           </Icon.Button>
         </Right>
       </Header>
 
-      <Content >
-
+      <Content>
         <FormItem rounded>
-          <Input placeholder='Search' />
+          <Input placeholder="Search" />
           <Button onclick="">
-            <Text>
-              GO
-            </Text>
+            <Text>GO</Text>
           </Button>
         </FormItem>
       </Content>
 
-      <Footer >
-        <FooterTab style={{ backgroundColor: 'black' }} >
+      <Footer>
+        <FooterTab style={{backgroundColor: 'black'}}>
           <Button vertical>
             <Text>Home</Text>
           </Button>
-          <Button vertical onPress={() => {
-            Actions.reader();
-          }}>
+          <Button
+            vertical
+            onPress={() => {
+              Actions.reader();
+            }}>
             <Text>Book</Text>
           </Button>
-          <Button vertical >
+          <Button vertical>
             <Text>Statistics</Text>
           </Button>
-          <Button vertical onPress={() => {
-            Actions.learning();
-          }}>
+          <Button
+            vertical
+            onPress={() => {
+              Actions.learning();
+            }}>
             <Text>Learning</Text>
           </Button>
         </FooterTab>
       </Footer>
     </Container>
-
-
-  )
-}
-
-
+  );
+};
 
 const mapStateToProps = (state) => {
   return {

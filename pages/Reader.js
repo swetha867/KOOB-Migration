@@ -6,30 +6,19 @@
  * @flow strict-local
  */
 
-import React, {useEffect, useState, useRef,useContext} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {Text, TouchableOpacity} from 'react-native';
 // import {ExternalStorageDirectoryPath} from 'react-native-fs';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import GestureRecognizer from 'react-native-swipe-gestures';
 // import Uploady, { UploadyContext } from "@rpldy/uploady";
-
-
 import {WebView} from 'react-native-webview';
-import StaticServer from 'react-native-static-server';
 
 // import RNFileSelector from 'react-native-file-selector';
 
 // import RNFS from 'react-native-fs';
 const config = {
   velocityThreshold: 0.3,
-  directionalOffsetThreshold: 80
+  directionalOffsetThreshold: 80,
 };
 const Reader = () => {
   const serverConfig = {localOnly: true, keepAlive: true};
@@ -38,8 +27,8 @@ const Reader = () => {
   const [book, setBook] = useState('');
   const [showBook, setShowBook] = useState(true);
   const [state, setState] = useState({bookUrl: null, server: null});
-  const bookLocations =useState("");
- // const myHtmlFile = require("./pages/epub.html");
+  const bookLocations = useState('');
+  // const myHtmlFile = require("./pages/epub.html");
   const [uploadUrl, setUploadUrl] = useState(false);
 
   // useItemFinishListener((item) => {
@@ -48,9 +37,6 @@ const Reader = () => {
   //   setUploadUrl(response.url);
   //   let injectedJS = `window.BOOK_PATH = "${uploadUrl}";`
   // });
-
-
-
 
   function _onPress() {
     let filter;
@@ -79,13 +65,9 @@ const Reader = () => {
     //   },
     //   onCancel: () => {},
     // });
-
-   
-
   }
   function startServer(url) {
     // console.log("book"+url);
-
     // let newone = url.replace(ExternalStorageDirectoryPath, '');
     // let newServer = new StaticServer(
     //   0,
@@ -97,56 +79,39 @@ const Reader = () => {
     //         bookUrl: url + newone,
     //         server: newServer
     //   }))
-
     //    return () => {
     //     state.server && state.server.stop();
     //   };
+  }
+  console.log('url' + state.bookUrl);
+  function goPrev() {
+    webview.current?.injectJavaScript('window.rendition.prev()');
+  }
 
-    }
-      console.log('url' + state.bookUrl);
-      function goPrev() {
-        webview.current?.injectJavaScript(`window.rendition.prev()`);
-      }
-    
-      function goNext() {
-        webview.current?.injectJavaScript(`window.rendition.next()`);
-      }
-     
-    
+  function goNext() {
+    webview.current?.injectJavaScript('window.rendition.next()');
+  }
 
-  
   return (
     <>
-     
+      <WebView
+        ref={webview}
+        source={{uri: 'file:///android_asset/epub_renderer.html'}}
+      />
 
-  
- <WebView 
-          ref={webview}
-          source={{ uri:'file:///android_asset/epub_renderer.html'}}            
-            
-            />   
-
-             <GestureRecognizer
+      <GestureRecognizer
         onSwipeLeft={goPrev}
         onSwipeRight={goNext}
         config={config}
-        
-        ></GestureRecognizer>
-<TouchableOpacity				onPress={goPrev}
-				
-			>
-<Text>Prev</Text>
-        </TouchableOpacity>
-<TouchableOpacity				onPress={goNext}
-				
-			>
-<Text>next</Text>
-        </TouchableOpacity>
-       
-     
+      />
+      <TouchableOpacity onPress={goPrev}>
+        <Text>Prev</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={goNext}>
+        <Text>next</Text>
+      </TouchableOpacity>
     </>
   );
 };
-
 
 export default Reader;
