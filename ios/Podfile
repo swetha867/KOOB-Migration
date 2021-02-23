@@ -10,6 +10,8 @@ target 'Reader' do
 
   pod 'RNFileSelector', :path => '../node_modules/react-native-file-selector'
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   target 'ReaderTests' do
     inherit! :complete
     # Pods for testing

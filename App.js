@@ -39,17 +39,19 @@ import React from 'react';
 
 import { Provider } from 'react-redux';
 import Router from './Root';
-import configureStore from './configureStore';
+import {store,persistor} from './configureStore';
+import { PersistGate } from 'redux-persist/integration/react';
 
 
-const store = configureStore();
 
 export default class App extends React.Component {
   render () {
 
     return (
       <Provider store={store}>
+        <PersistGate persistor={persistor}>
         <Router/>
+        </PersistGate>
         </Provider>
     );  
     

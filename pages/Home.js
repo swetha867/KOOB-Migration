@@ -4,6 +4,14 @@ import { createStore } from 'redux';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import {addBook
+  
+} from "../redux/actions/bookActions";
+import {setBookURL,setCurrentBookLocation
+  
+} from "../redux/actions/userActions";
+import { Image } from 'react-native';
+
 import {
   Container,
   Header,
@@ -21,69 +29,56 @@ import {
   Label,
   Title,
   View,
+  Card, CardItem, Thumbnail
 } from 'native-base';
 import  { DocumentPickerResponse } from 'react-native-document-picker';
 
+import DocumentPicker from 'react-native-document-picker';
 
 const Home = ({
   
   isLoggedIn,
+  books,
+  bookUrl,
   dispatch,
 }) => {
-  const [books, setBooks] = React.useState([]);
-  React. useEffect(() => {
-    // clickForSearch("");
-  },[]);
+  const [booksStore, setBooksStore] = React.useState([]);
   const book=null;
-  const webview = useRef();
+  React. useEffect(() => {
+    console.log("home isLoggedin"+isLoggedIn)
+    renderBooks();
+  },[]);
+  
 
   bookChooser= (e)=> { 
-    // console.log("hello")
-    // var firstFile = e;
-    // alert(firstFile)
-    // if (window.FileReader) {
-    //     var reader = new FileReader();
-    //     reader.onload = function(e) {
-    //         book = ePub({
-    //             bookPath: e.target.result
-    //         });
-
-    //         book.renderTo("area");
-    //         /* Replace area with the id for your div to put the book in */
-    //     }.bind(this);
-
-    //     reader.readAsArrayBuffer(firstFile);
-
-    // } else {
-    //     alert("Your browser does not support the required features. Please use a modern browser such as Google Chrome, or Mozilla Firefox");
-    // }
+  
 };
 
-
-
-prev=()=>{
-    book.prevPage();
-}
-
-next=()=>{
-    book.nextPage();
-}
-
-
-
+renderBooks=()=>{
+  
+    for(let i=0;i<books.length;i++){
+        booksStore.push(books[i]);
+    }
+    console.log(booksStore[0])
+  }
+  
 handleFilePicker= async () => {
    // console.log(bookSearch)
     
    try {
     const res = await DocumentPicker.pick({
-      type: [DocumentPicker.types.images],
+      type: [DocumentPicker.types.allFiles],
     });
+    //name, link, flag, author,imgpath
     console.log(
       res.uri,
       res.type, // mime type
       res.name,
       res.size
     );
+   let payload= { url:res.uri,type:res.type,book_name:res.name }
+   dispatch(addBook(res.uri,res.name));
+
   } catch (err) {
     if (DocumentPicker.isCancel(err)) {
       // User cancelled the picker, exit any dialogs or menus and move on
@@ -91,9 +86,18 @@ handleFilePicker= async () => {
       throw err;
     }
   }
-   
+  console.log("books"+books.length)
+ // console.log(res.uri);
+
+ 
    
   }
+ openBook=(url)=>{
+      dispatch(setBookURL(url));
+      console.log("Home Page"+bookUrl);
+
+      return Actions.reader();
+ }
   
   
   
@@ -156,13 +160,25 @@ handleFilePicker= async () => {
         <Content >
       
               <FormItem rounded>
-              <Input placeholder='Search'/>
-              <Button onclick= "">
-            <Text>
-              GO
-            </Text>
-          </Button>
+              <Input placeholder='Search' />
             </FormItem>
+            {booksStore.map((item, index) => {
+                        return(
+
+            <Card key={index} style={{flex: 0}}>
+            <CardItem button onPress={() =>{dispatch(setBookURL(item.url));
+            Actions.reader();}}>
+              <Left>
+                {/* <Thumbnail source={{uri: 'Image URL'}} /> */}
+                <Body>
+                  <Text>{item.book_name}</Text>
+                  <Text note>{item.url}</Text>
+                </Body>
+              </Left>
+            </CardItem>
+          </Card>
+             );
+          })}
             </Content>
 
       <Footer >
@@ -196,6 +212,9 @@ handleFilePicker= async () => {
         const mapStateToProps = (state) => {
           return {
             isLoggedIn: state.userReducer.isLoggedIn,
+            books:state.booksReducer.books,
+            bookUrl:state.userReducer.book_url
+
           };
         };
  export default connect(mapStateToProps)(Home);

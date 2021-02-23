@@ -16,22 +16,22 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-// import {ExternalStorageDirectoryPath} from 'react-native-fs';
+import {connect} from 'react-redux';
+
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
-// import Uploady, { UploadyContext } from "@rpldy/uploady";
 
 
 import {WebView} from 'react-native-webview';
 import StaticServer from 'react-native-static-server';
 
-// import RNFileSelector from 'react-native-file-selector';
 
 // import RNFS from 'react-native-fs';
 const config = {
   velocityThreshold: 0.3,
   directionalOffsetThreshold: 80
 };
-const Reader = () => {
+const Reader = (   isLoggedIn,  bookUrl,
+  dispatch,) => {
   const serverConfig = {localOnly: true, keepAlive: true};
   const webview = useRef();
   const [visible, setVisible] = useState(true);
@@ -39,21 +39,19 @@ const Reader = () => {
   const [showBook, setShowBook] = useState(true);
   const [state, setState] = useState({bookUrl: null, server: null});
   const bookLocations =useState("");
- // const myHtmlFile = require("./pages/epub.html");
-  const [uploadUrl, setUploadUrl] = useState(false);
+ 
+  React. useEffect(() => {
+    console.log("isLoggedin"+isLoggedIn)
+    console.log("Reader Page"+bookUrl);
 
-  // useItemFinishListener((item) => {
-  //   const response = JSON.parse(item.uploadResponse.data);
-  //   console.log(`item ${item.id} finished uploading, response was: `, response);
-  //   setUploadUrl(response.url);
-  //   let injectedJS = `window.BOOK_PATH = "${uploadUrl}";`
-  // });
-
-
-
+  },[]);
 
   function _onPress() {
     let filter;
+    const split = url.split('/');
+const name = split.pop();
+const inbox = split.pop();
+const realPath = `${RNFS.TemporaryDirectoryPath}${inbox}/${name}`;
     // if (Platform.OS === 'ios') {
     //   filter = [];
     // } else if (Platform.OS === 'android') {
@@ -103,7 +101,12 @@ const Reader = () => {
     //   };
 
     }
-      console.log('url' + state.bookUrl);
+    let injectedJS = `window.BOOK_PATH = "${state.bookUrl}";
+	window.LOCATIONS = ${bookLocations};
+	
+	`;
+  // window.THEME = ${JSON.stringify(themeToStyles(props.settings))};
+    //  console.log('url' + state.bookUrl);
       function goPrev() {
         webview.current?.injectJavaScript(`window.rendition.prev()`);
       }
@@ -123,7 +126,8 @@ const Reader = () => {
  <WebView 
           ref={webview}
           source={{ uri:'file:///android_asset/epub_renderer.html'}}            
-            
+          injectedJavaScriptBeforeContentLoaded={injectedJS}
+
             />   
 
              <GestureRecognizer
@@ -149,4 +153,10 @@ const Reader = () => {
 };
 
 
-export default Reader;
+const mapStateToProps = (state) => {
+  return {
+    isLoggedIn: state.userReducer.isLoggedIn,
+    bookUrl:state.userReducer.book_url
+  };
+};
+export default connect(mapStateToProps)(Reader);
