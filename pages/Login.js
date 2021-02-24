@@ -1,5 +1,3 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {
   Body,
   Button,
@@ -12,7 +10,7 @@ import {
   Text,
   Title,
 } from 'native-base';
-import React from 'react';
+import {default as React} from 'react';
 import {connect} from 'react-redux';
 // import Home from './Home';
 // import { AsyncStorage } from 'react-native';
