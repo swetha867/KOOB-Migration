@@ -6,8 +6,9 @@ const INITIAL_STATE = {
   email: '',
   userId: '',
   isTeacher: '',
-  // note: '',
-  // noteList: ''
+  student_id: '',
+  book_url: '',
+  current_book_location: '',
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -15,7 +16,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case 'USER_SET_USER_ID':
       return {
         ...state,
-        user: action.userId,
+        userId: action.userId,
       };
     case 'USER_SET_EMAIL':
       return {
@@ -37,17 +38,16 @@ const userReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isTeacher: action.isTeacher,
       };
-    // case 'USER_SAVE_NOTE':
-    // return{
-    //     ...state,
-    //     loadingState: action.note,
-
-    // }
-    // case 'USER_SHOW_NOTE_LIST':
-    // return{
-    //     ...state,
-    //     loadingState: action.noteList,
-    // }
+    case 'USER_BOOK_URL':
+      return {
+        ...state,
+        book_url: action.book_url,
+      };
+    case 'USER_CURRENT_BOOK_LOCATION':
+      return {
+        ...state,
+        current_book_location: action.current_book_location,
+      };
     default:
       return state;
   }

@@ -1,3 +1,13 @@
+import React, {Component, useRef} from 'react';
+import {connect} from 'react-redux';
+import {createStore} from 'redux';
+import {Actions} from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import {addBook} from '../redux/actions/bookActions';
+import {setBookURL, setCurrentBookLocation} from '../redux/actions/userActions';
+import {Image} from 'react-native';
+
 import {
   Button,
   Container,
@@ -9,62 +19,53 @@ import {
   Item as FormItem,
   Left,
   Right,
-  Text,
+  Content,
+  Item as FormItem,
+  Input,
+  Label,
+  Title,
+  View,
+  Card,
+  CardItem,
+  Thumbnail,
 } from 'native-base';
-import React, {useRef} from 'react';
+import {DocumentPickerResponse} from 'react-native-document-picker';
+
 import DocumentPicker from 'react-native-document-picker';
-import {Actions} from 'react-native-router-flux';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {connect} from 'react-redux';
 
-const Home = ({isLoggedIn, dispatch}) => {
-  const [books, setBooks] = React.useState([]);
-  React.useEffect(() => {
-    // clickForSearch("");
-  }, []);
+const Home = ({isLoggedIn, books, bookUrl, dispatch}) => {
+  const [booksStore, setBooksStore] = React.useState([]);
   const book = null;
-  const webview = useRef();
+  React.useEffect(() => {
+    console.log('home isLoggedin' + isLoggedIn);
+    renderBooks();
+  }, []);
 
-  const bookChooser = (e) => {
-    // console.log("hello")
-    // var firstFile = e;
-    // alert(firstFile)
-    // if (window.FileReader) {
-    //     var reader = new FileReader();
-    //     reader.onload = function(e) {
-    //         book = ePub({
-    //             bookPath: e.target.result
-    //         });
-    //         book.renderTo("area");
-    //         /* Replace area with the id for your div to put the book in */
-    //     }.bind(this);
-    //     reader.readAsArrayBuffer(firstFile);
-    // } else {
-    //     alert("Your browser does not support the required features. Please use a modern browser such as Google Chrome, or Mozilla Firefox");
-    // }
+  bookChooser = (e) => {};
+
+  renderBooks = () => {
+    for (let i = 0; i < books.length; i++) {
+      booksStore.push(books[i]);
+    }
+    console.log(booksStore[0]);
   };
 
-  const prev = () => {
-    book.prevPage();
-  };
-
-  const next = () => {
-    book.nextPage();
-  };
-
-  const handleFilePicker = async () => {
+  handleFilePicker = async () => {
     // console.log(bookSearch)
 
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images],
+        type: [DocumentPicker.types.allFiles],
       });
+      //name, link, flag, author,imgpath
       console.log(
         res.uri,
         res.type, // mime type
         res.name,
         res.size,
       );
+      let payload = {url: res.uri, type: res.type, book_name: res.name};
+      dispatch(addBook(res.uri, res.name));
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
@@ -72,9 +73,17 @@ const Home = ({isLoggedIn, dispatch}) => {
         throw err;
       }
     }
+    console.log('books' + books.length);
+    // console.log(res.uri);
+  };
+  openBook = (url) => {
+    dispatch(setBookURL(url));
+    console.log('Home Page' + bookUrl);
+
+    return Actions.reader();
   };
 
-  const _pickDocument = async () => {
+  _pickDocument = async () => {
     // let result = await DocumentPicker.getDocumentAsync({});
     // // need to verify whether doc is epub
     // var slash_index = result.name.lastIndexOf("/") + 1;
@@ -126,10 +135,27 @@ const Home = ({isLoggedIn, dispatch}) => {
       <Content>
         <FormItem rounded>
           <Input placeholder="Search" />
-          <Button onclick="">
-            <Text>GO</Text>
-          </Button>
         </FormItem>
+        {booksStore.map((item, index) => {
+          return (
+            <Card key={index} style={{flex: 0}}>
+              <CardItem
+                button
+                onPress={() => {
+                  dispatch(setBookURL(item.url));
+                  Actions.reader();
+                }}>
+                <Left>
+                  {/* <Thumbnail source={{uri: 'Image URL'}} /> */}
+                  <Body>
+                    <Text>{item.book_name}</Text>
+                    <Text note>{item.url}</Text>
+                  </Body>
+                </Left>
+              </CardItem>
+            </Card>
+          );
+        })}
       </Content>
 
       <Footer>
@@ -163,6 +189,8 @@ const Home = ({isLoggedIn, dispatch}) => {
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.userReducer.isLoggedIn,
+    books: state.booksReducer.books,
+    bookUrl: state.userReducer.book_url,
   };
 };
 export default connect(mapStateToProps)(Home);

@@ -1,9 +1,5 @@
-import axios from 'axios';
-// import { Redirect } from "react-router-dom";
-// import { NavigationContainer,navigate,navigation } from '@react-navigation/native';
-// import {View,TouchableOpacity,Text,TextInput}  from 'react-native';
-// import
-// {Item as FormItem, Container ,Header,Button,Input,Label} from 'native-base';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {
   Body,
   Button,
