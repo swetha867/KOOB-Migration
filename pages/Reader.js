@@ -11,6 +11,10 @@ import {Text, TouchableOpacity} from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import {WebView} from 'react-native-webview';
 import {connect} from 'react-redux';
+import StaticServer from 'react-native-static-server';
+
+import RNFS from 'react-native-fs';
+import {EPUB_IMPORT_LOCAL_DIR_NAME} from '../constants';
 
 const epub_renderer = require('../assets/epub_renderer.html');
 
@@ -28,11 +32,6 @@ const Reader = ({isLoggedIn, bookUrl, dispatch}) => {
   const [state, setState] = useState({bookUrl: null, server: null});
   const bookLocations = useState('');
 
-  React.useEffect(() => {
-    console.log('isLoggedin' + isLoggedIn);
-    console.log('Reader Page' + bookUrl);
-  }, []);
-
   function _onPress() {
     let filter;
     const split = url.split('/');
@@ -40,30 +39,40 @@ const Reader = ({isLoggedIn, bookUrl, dispatch}) => {
     const inbox = split.pop();
     const realPath = `${RNFS.TemporaryDirectoryPath}${inbox}/${name}`;
   }
+
   function startServer(url) {
-    // console.log("book"+url);
-    // let newone = url.replace(ExternalStorageDirectoryPath, '');
-    // let newServer = new StaticServer(
-    //   0,
-    //   ExternalStorageDirectoryPath,
-    //   serverConfig,
-    // );
-    // newServer.start().then((url) =>
-    //       setState({
-    //         bookUrl: url + newone,
-    //         server: newServer
-    //   }))
-    //    return () => {
-    //     state.server && state.server.stop();
-    //   };
+    const book_name = 'childrens-literature.epub';
+
+    let newServer = new StaticServer(
+      0,
+      `${RNFS.DocumentDirectoryPath}/${EPUB_IMPORT_LOCAL_DIR_NAME}`,
+      serverConfig,
+    );
+    newServer.start().then((url) => {
+      const book_name = 'childrens-literature.epub';
+      console.log(url + '/' + book_name);
+      setState({
+        bookUrl: url + book_name,
+        server: newServer,
+      });
+    });
+    return () => {
+      state.server && state.server.stop();
+    };
   }
+
+  React.useEffect(() => {
+    console.log('isLoggedin' + isLoggedIn);
+    console.log('Reader Page' + bookUrl);
+    startServer();
+  }, []);
+
   console.log('url' + state.bookUrl);
   function goPrev() {
     webview.current?.injectJavaScript('window.rendition.prev()');
   }
-  let injectedJS = `window.BOOK_PATH = "${state.bookUrl}";window.LOCATIONS = ${bookLocations};`;
-  // window.THEME = ${JSON.stringify(themeToStyles(props.settings))};
-  //  console.log('url' + state.bookUrl);
+  let injectedJS = `renderEpubFile(${state.bookUrl})`;
+
   function goPrev() {
     webview.current?.injectJavaScript(`window.rendition.prev()`);
   }

@@ -23,10 +23,11 @@
 		<div id="area"></div>
 	</body>
 	<script>
-		//  window.book = ePub(window.BOOK_PATH);
-		window.book = ePub("https://s3.amazonaws.com/epubjs/books/moby-dick.epub");
-
-  		window.rendition = window.book.renderTo("area", { method: "continuous",width: 600, height: 400});
-  		var displayed = window.rendition.display();
+		function renderEpubFile(fileLocation){
+			window.book = ePub(fileLocation);	
+			window.rendition = window.book.renderTo("area", { method: "continuous",width: 600, height: 400});
+			var displayed = window.rendition.display();
+		}
+		renderEpubFile("http://localhost:56117/childrens-literature.epub");
 	</script>
 </html>
