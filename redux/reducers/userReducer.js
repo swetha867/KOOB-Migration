@@ -8,7 +8,8 @@ userId:'',
 isTeacher:'',
 student_id:'',
 book_url: '',
-current_book_location: ''
+current_book_location: '',
+current_book_name:''
 };
 
 const userReducer =(state = INITIAL_STATE,action) =>{
@@ -48,6 +49,11 @@ const userReducer =(state = INITIAL_STATE,action) =>{
             return{
                 ...state,
                 current_book_location: action.current_book_location,
+            }
+            case 'USER_CURRENT_BOOK_NAME':
+            return{
+                ...state,
+                current_book_name: action.current_book_name,
             }
         default:
             return state;

@@ -7,10 +7,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {addBook
   
 } from "../redux/actions/bookActions";
-import {setBookURL,setCurrentBookLocation
+import {setBookURL,setCurrentBookLocation,setCurrentBookName
   
 } from "../redux/actions/userActions";
-import { Image } from 'react-native';
+import { Image,PermissionsAndroid } from 'react-native';
 
 import {
   Container,
@@ -32,7 +32,7 @@ import {
   Card, CardItem, Thumbnail
 } from 'native-base';
 import  { DocumentPickerResponse } from 'react-native-document-picker';
-
+import RNFetchBlob from 'rn-fetch-blob';
 import DocumentPicker from 'react-native-document-picker';
 
 const Home = ({
@@ -44,10 +44,10 @@ const Home = ({
 }) => {
   const [booksStore, setBooksStore] = React.useState([]);
   const book=null;
-  React. useEffect(() => {
+  React.useLayoutEffect(() => {
     console.log("home isLoggedin"+isLoggedIn)
     renderBooks();
-  },[]);
+  });
   
 
   bookChooser= (e)=> { 
@@ -61,11 +61,32 @@ renderBooks=()=>{
     }
     console.log(booksStore[0])
   }
-  
+  requestStoragePermission = async () => {
+
+    if (Platform.OS !== "android") return true
+
+    const pm1 = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+    const pm2 = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+
+    if (pm1 && pm2) return true
+
+    const userResponse = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+    ]);
+
+    if (userResponse['android.permission.READ_EXTERNAL_STORAGE'] === 'granted' &&
+        userResponse['android.permission.WRITE_EXTERNAL_STORAGE'] === 'granted') {
+        return true
+    } else {
+        return false
+    }
+}
 handleFilePicker= async () => {
    // console.log(bookSearch)
-    
-   try {
+   let granted = await requestStoragePermission();
+  //  if (!granted) await getStoragePermission();
+    try {
     const res = await DocumentPicker.pick({
       type: [DocumentPicker.types.allFiles],
     });
@@ -76,7 +97,7 @@ handleFilePicker= async () => {
       res.name,
       res.size
     );
-   let payload= { url:res.uri,type:res.type,book_name:res.name }
+  //  let realPath = `file://${RNFetchBlob.fs.dirs.SDCardDir}/${res.name}`;
    dispatch(addBook(res.uri,res.name));
 
   } catch (err) {
@@ -90,12 +111,12 @@ handleFilePicker= async () => {
  // console.log(res.uri);
 
  
-   
-  }
- openBook=(url)=>{
+}
+  
+ openBook=(url,book_name)=>{
       dispatch(setBookURL(url));
-      console.log("Home Page"+bookUrl);
-
+      dispatch(setCurrentBookName(book_name))
+      console.log(book_name)
       return Actions.reader();
  }
   
@@ -166,8 +187,7 @@ handleFilePicker= async () => {
                         return(
 
             <Card key={index} style={{flex: 0}}>
-            <CardItem button onPress={() =>{dispatch(setBookURL(item.url));
-            Actions.reader();}}>
+            <CardItem button onPress={() =>openBook(item.url,item.book_name)}>
               <Left>
                 {/* <Thumbnail source={{uri: 'Image URL'}} /> */}
                 <Body>
@@ -183,7 +203,8 @@ handleFilePicker= async () => {
 
       <Footer >
         <FooterTab style={{ backgroundColor: 'black' }} >
-          <Button vertical>
+          <Button vertical onPress={() => {
+            Actions.home();}}>
             <Text>Home</Text>
           </Button>
           <Button vertical onPress={() => {

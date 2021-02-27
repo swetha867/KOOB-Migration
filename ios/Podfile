@@ -12,6 +12,8 @@ target 'Reader' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'RNZipArchive', :path => '../node_modules/react-native-zip-archive'
+
   target 'ReaderTests' do
     inherit! :complete
     # Pods for testing

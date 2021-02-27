@@ -26,5 +26,9 @@ export const setCurrentBookLocation=current_book_location =>({
     type: 'USER_CURRENT_BOOK_LOCATION',
     current_book_location,
 });
+export const setCurrentBookName=current_book_name =>({
+    type: 'USER_CURRENT_BOOK_NAME',
+    current_book_name,
+});
 
 //setUser('Hello')-->{type: 'USER_SET_USER', user:hello}
