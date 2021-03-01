@@ -21,10 +21,12 @@ import {
   Body,
 } from 'native-base';
 
-import {addBook} from '../redux/actions/bookActions';
-import {setBookURL} from '../redux/actions/userActions';
+import {addBookAsyncAction} from '../redux/actions/asyncActions';
+import {setActiveBookFileName} from '../redux/actions/activeBookActions';
 
-const Home = ({isLoggedIn, books, bookUrl, dispatch}) => {
+import {logger} from '../utils/logger';
+
+const Home = ({books, dispatch}) => {
   handleFilePicker = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -37,8 +39,7 @@ const Home = ({isLoggedIn, books, bookUrl, dispatch}) => {
         res.name,
         res.size,
       );
-      let payload = {url: res.uri, type: res.type, book_name: res.name};
-      dispatch(addBook(res.uri, res.name));
+      dispatch(addBookAsyncAction(res.uri, res.name));
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
@@ -46,13 +47,12 @@ const Home = ({isLoggedIn, books, bookUrl, dispatch}) => {
         throw err;
       }
     }
-    console.log('books' + books.length);
-    // console.log(res.uri);
   };
 
-  const openBook = (url) => {
-    dispatch(setBookURL(url));
-    console.log('Home Page' + bookUrl);
+  const openBook = (book) => {
+    const {title, file_name} = book;
+    dispatch(setActiveBookFileName(file_name));
+    logger.info(`Opening ${title} located at ${file_name}`);
     return Actions.reader();
   };
 
@@ -86,16 +86,11 @@ const Home = ({isLoggedIn, books, bookUrl, dispatch}) => {
         {books.map((item, index) => {
           return (
             <Card key={index} style={{flex: 0}}>
-              <CardItem
-                button
-                onPress={() => {
-                  dispatch(setBookURL(item.url));
-                  Actions.reader();
-                }}>
+              <CardItem button onPress={() => openBook(item)}>
                 <Left>
                   {/* <Thumbnail source={{uri: 'Image URL'}} /> */}
                   <Body>
-                    <Text>{item.book_name}</Text>
+                    <Text>{item.title}</Text>
                     {/* <Text note>{item.url}</Text> */}
                   </Body>
                 </Left>
@@ -137,7 +132,6 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.userReducer.isLoggedIn,
     books: state.booksReducer.books,
-    bookUrl: state.userReducer.book_url,
   };
 };
 export default connect(mapStateToProps)(Home);

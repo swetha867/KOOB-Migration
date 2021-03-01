@@ -12,6 +12,8 @@ target 'Reader' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'react-native-get-random-values', :path => '../node_modules/react-native-get-random-values'
+
   target 'ReaderTests' do
     inherit! :complete
     # Pods for testing

@@ -1,4 +1,4 @@
-export const addBook = (url, book_name) => ({
-  type: 'ADD_BOOKS',
-  payload: {url: url, book_name: book_name},
+export const addBook = (book_title, file_name) => ({
+  type: 'BOOK_ADDED',
+  payload: {book_title, file_name},
 });
