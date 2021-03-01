@@ -17,12 +17,9 @@
 //   StatusBar,
 // } from 'react-native';
 
-
 // import { Provider } from 'react-redux';
 // import { createStore } from 'redux';
 // import { connect } from "react-redux";
-
-
 
 // // import { NativeRouter, Route, Link,Switch } from "react-router-native";
 // import { ReactDOM, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
@@ -37,24 +34,19 @@
 
 import React from 'react';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import Router from './Root';
-import {store,persistor} from './configureStore';
-import { PersistGate } from 'redux-persist/integration/react';
-
-
+import {store, persistor} from './configureStore';
+import {PersistGate} from 'redux-persist/integration/react';
 
 export default class App extends React.Component {
-  render () {
-
+  render() {
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>
-        <Router/>
+          <Router />
         </PersistGate>
-        </Provider>
-    );  
-    
+      </Provider>
+    );
   }
-  
 }

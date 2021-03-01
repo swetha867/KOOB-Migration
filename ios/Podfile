@@ -8,11 +8,11 @@ target 'Reader' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  pod 'RNFileSelector', :path => '../node_modules/react-native-file-selector'
-
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
-  pod 'RNZipArchive', :path => '../node_modules/react-native-zip-archive'
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
+  pod 'react-native-get-random-values', :path => '../node_modules/react-native-get-random-values'
 
   target 'ReaderTests' do
     inherit! :complete
@@ -23,7 +23,7 @@ target 'Reader' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  use_flipper!
+  use_flipper!({ 'Flipper-Folly' => '2.3.0' })
   post_install do |installer|
     flipper_post_install(installer)
   end

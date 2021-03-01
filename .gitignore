@@ -57,3 +57,12 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+ios/Reader.xcodeproj/project.pbxproj
+ios/Reader.xcodeproj/project.pbxproj
+ios/Reader.xcodeproj/xcshareddata/xcschemes/Reader-tvOS.xcscheme
+ios/Reader.xcodeproj/xcshareddata/xcschemes/Reader.xcscheme
+ios/Reader.xcworkspace/contents.xcworkspacedata
+ios/Reader.xcodeproj/project.pbxproj
+.gitignore
+ios/Reader.xcodeproj/xcshareddata/xcschemes/Reader.xcscheme
+.gitignore
