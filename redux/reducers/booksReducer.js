@@ -1,3 +1,6 @@
+import RNFS from 'react-native-fs';
+import {EPUB_IMPORT_LOCAL_DIR_NAME} from '../../constants';
+
 const INITIAL_STATE = {
   books: [],
 };
