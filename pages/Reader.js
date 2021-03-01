@@ -12,15 +12,12 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import {WebView} from 'react-native-webview';
 import {connect} from 'react-redux';
 import StaticServer from 'react-native-static-server';
-import { startClock } from 'react-native-reanimated';
 
 import RNFS from 'react-native-fs';
-import {EPUB_IMPORT_LOCAL_DIR_NAME} from '../constants';
 import {logger} from '../utils/logger';
 
 const epub_renderer = require('../assets/epub_renderer.html');
 
-import RNFS from 'react-native-fs';
 import {EPUB_IMPORT_LOCAL_DIR_NAME} from '../constants';
 
 //const epub_renderer = require('../assets/epub_renderer.html');
@@ -28,6 +25,7 @@ const config = {
   velocityThreshold: 0.3,
   directionalOffsetThreshold: 80,
 };
+
 const Reader = ({activeBookFileName, dispatch}) => {
   const serverConfig = {localOnly: true, keepAlive: true};
   const webview = useRef();
@@ -89,6 +87,7 @@ const Reader = ({activeBookFileName, dispatch}) => {
       </TouchableOpacity>
     </>
   );
+};
 
 const mapStateToProps = (state) => {
   return {
