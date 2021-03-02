@@ -1,32 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
-		<style>
-			body {
-				margin: 0;
-			}
-			#reader {				
-				height: 100vh;
-				width: 100vw;
-				overflow: hidden !important;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-		</style>
-		<script>
-			function renderEpubFile(fileLocation){
-				window.book = ePub(fileLocation);	
-				window.rendition = window.book.renderTo("area", { method: "continuous",width: 600, height: 400});
-				var displayed = window.rendition.display();
-			}
-		</script>
-	</head>
-	<body>
-		<div id="area"></div>
-	</body>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+	<style>
+		body {
+			margin: 0;
+		}
+
+		#reader {
+			height: 100vh;
+			width: 100vw;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	</style>
+	<script>
+		function renderEpubFile(fileLocation) {
+			window.book = ePub(fileLocation);
+			window.rendition = window.book.renderTo('area', { method: 'paginated' });
+			window.rendition.display();
+			window.rendition.on('selected', (event) => {
+				let selected =
+					window.rendition.manager &&
+						window.rendition.manager.getContents().length > 0
+						? window.rendition.manager
+							.getContents()[0]
+							.window.getSelection()
+							.toString()
+							.trim()
+						: '';
+				if (selected) {
+					window.ReactNativeWebView.postMessage(
+						JSON.stringify({ type: 'selected', selected, event }),
+					);
+				}
+			});
+			setTimeout(() => {
+				window.ReactNativeWebView.postMessage(
+					JSON.stringify({ type: 'selected', selected: "Hello world" }),
+				);
+			}, 5000);
+		}
+	</script>
+</head>
+
+<body>
+	<div id="area"></div>
+</body>
+
 </html>

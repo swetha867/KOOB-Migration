@@ -27,3 +27,18 @@ export function addBookAsyncAction(url, book_title) {
     });
   };
 }
+
+export function fetchMeanings(word) {
+  return function (dispatch) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const meanings = {
+          adjective: [],
+          pronoun: [],
+        };
+        dispatch();
+        resolve();
+      }, 1000);
+    });
+  };
+}
