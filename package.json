@@ -13,9 +13,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
     "axios": "^0.21.1",
-    "history": "^5.0.0",
     "install": "^0.13.0",
-    "ios-deploy": "^1.11.4",
     "lodash": "^4.17.21",
     "loglevel": "^1.7.1",
     "native-base": "^2.15.2",
@@ -33,6 +31,7 @@
     "react-native-screens": "^2.17.1",
     "react-native-static-server": "^0.5.0",
     "react-native-swipe-gestures": "^1.0.5",
+    "react-native-tts": "^3.3.0",
     "react-native-webview": "^10.7.0",
     "react-native-zip-archive": "^6.0.2",
     "react-redux": "^7.2.2",

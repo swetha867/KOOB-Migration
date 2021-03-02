@@ -2,6 +2,7 @@ const INITIAL_STATE = {
   file_name: '',
   book_location: undefined,
   selected_word: undefined,
+  dictionary_data: [],
 };
 
 const activeBookReducer = (state = INITIAL_STATE, action) => {
@@ -21,6 +22,11 @@ const activeBookReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selected_word: action.selected_word,
+      };
+    case 'ACTIVE_BOOK_SELECTED_WORD_MEANINGS':
+      return {
+        ...state,
+        dictionary_data: action.dictionary_data,
       };
     default:
       return state;

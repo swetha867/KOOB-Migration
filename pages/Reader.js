@@ -27,14 +27,22 @@ import DictionaryModal from '../components/DictionaryModal';
 
 import {EPUB_IMPORT_LOCAL_DIR_NAME} from '../constants';
 
-import {setSelectedWord} from '../redux/actions/activeBookActions';
+import {
+  setSelectedWord,
+  setActiveBookLocation,
+} from '../redux/actions/activeBookActions';
 
 const config = {
   velocityThreshold: 0.3,
   directionalOffsetThreshold: 80,
 };
 
-const Reader = ({activeBookFileName, selectedWord, dispatch}) => {
+const Reader = ({
+  activeBookFileName,
+  selectedWord,
+  book_location,
+  dispatch,
+}) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
@@ -85,6 +93,10 @@ const Reader = ({activeBookFileName, selectedWord, dispatch}) => {
     const {selected, event} = parsedData;
     console.log(event);
     dispatch(setSelectedWord(selected));
+    const {locations, event1} = parsedData;
+    dispatch(setActiveBookLocation(locations));
+    console.log(event1);
+
     // switch (type) {
     //   case 'selected': {
     //     setSelectedText(parsedData.selected);
@@ -153,6 +165,7 @@ const mapStateToProps = (state) => {
     isLoggedIn: state.userReducer.isLoggedIn,
     activeBookFileName: state.activeBookReducer.file_name,
     selectedWord: state.activeBookReducer.selected_word,
+    book_location: state.activeBookReducer.setActiveBookLocation,
   };
 };
 export default connect(mapStateToProps)(Reader);

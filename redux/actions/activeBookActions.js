@@ -13,7 +13,7 @@ export const setSelectedWord = (selected_word) => ({
   selected_word,
 });
 
-export const getWordMeanings = (meanings) => ({
+export const setWordMeanings = (meanings) => ({
   type: 'ACTIVE_BOOK_SELECTED_WORD_MEANINGS',
   meanings,
 });

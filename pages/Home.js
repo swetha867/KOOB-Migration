@@ -2,8 +2,8 @@ import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {Actions} from 'react-native-router-flux';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {
   Button,
@@ -22,7 +22,10 @@ import {
 } from 'native-base';
 
 import {addBookAsyncAction} from '../redux/actions/asyncActions';
-import {setActiveBookFileName} from '../redux/actions/activeBookActions';
+import {
+  setActiveBookFileName,
+  setActiveBookLocation,
+} from '../redux/actions/activeBookActions';
 
 import {logger} from '../utils/logger';
 
@@ -52,6 +55,7 @@ const Home = ({books, dispatch}) => {
   const openBook = (book) => {
     const {title, file_name} = book;
     dispatch(setActiveBookFileName(file_name));
+    dispatch(setActiveBookLocation(null));
     logger.info(`Opening ${title} located at ${file_name}`);
     return Actions.reader();
   };
@@ -103,24 +107,24 @@ const Home = ({books, dispatch}) => {
       <Footer>
         <FooterTab style={{backgroundColor: 'black'}}>
           <Button vertical>
-            <Text>Home</Text>
+            <Text style={{color: 'white'}}>Home</Text>
           </Button>
           <Button
             vertical
             onPress={() => {
               Actions.reader();
             }}>
-            <Text>Book</Text>
+            <Text style={{color: 'white'}}>Book</Text>
           </Button>
           <Button vertical>
-            <Text>Statistics</Text>
+            <Text style={{color: 'white'}}>Statistics</Text>
           </Button>
           <Button
             vertical
             onPress={() => {
               Actions.learning();
             }}>
-            <Text>Learning</Text>
+            <Text style={{color: 'white'}}>Learning</Text>
           </Button>
         </FooterTab>
       </Footer>
