@@ -320,6 +320,18 @@ PODS:
     - React-Core
   - RNScreens (2.17.1):
     - React-Core
+  - RNVectorIcons (8.1.0):
+    - React-Core
+  - RNZipArchive (6.0.2):
+    - React-Core
+    - RNZipArchive/Core (= 6.0.2)
+    - SSZipArchive (= 2.2.3)
+  - RNZipArchive/Core (6.0.2):
+    - React-Core
+    - SSZipArchive (= 2.2.3)
+  - SSZipArchive (2.2.3)
+  - TextToSpeech (2.0.0):
+    - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -381,6 +393,9 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - RNZipArchive (from `../node_modules/react-native-zip-archive`)
+  - TextToSpeech (from `../node_modules/react-native-tts`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -397,6 +412,7 @@ SPEC REPOS:
     - FlipperKit
     - GCDWebServer
     - OpenSSL-Universal
+    - SSZipArchive
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -470,6 +486,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
+  RNZipArchive:
+    :path: "../node_modules/react-native-zip-archive"
+  TextToSpeech:
+    :path: "../node_modules/react-native-tts"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -521,6 +543,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: 5e58135436aacc1c5d29b75547d3d2b9430d052c
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: b6c9607e6fe47c1b6e2f1910d2acd46dd7ecea3a
+  RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
+  RNZipArchive: 3dd2de5b7f590d79e83270508b78870bf5a54f36
+  SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
+  TextToSpeech: 4e2fc50c7495416c6da5a1662ad3f750c58d3c85
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

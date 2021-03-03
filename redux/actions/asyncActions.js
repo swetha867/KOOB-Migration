@@ -1,10 +1,11 @@
 import RNFS from 'react-native-fs';
 import {v4 as uuidv4} from 'uuid';
+import axios from 'axios';
 
 import {EPUB_IMPORT_LOCAL_DIR_NAME} from '../../constants';
 import {addBook} from './bookActions';
 import {logger} from '../../utils/logger';
-// import {setWordMeanings} from './activeBookActions';
+import {setWordMeanings} from './activeBookActions';
 
 export function addBookAsyncAction(url, book_title) {
   return function (dispatch) {
@@ -29,50 +30,31 @@ export function addBookAsyncAction(url, book_title) {
   };
 }
 
-/*
-  url: 'http://3.15.37.149:6010/lookup',
-            type: 'POST',
-
-{
-"word": "squares",
-"user_id": "20",
-"sentence": "Kinship was an assertion",
-"book_name": "Reading with Patrick",
-"author_name": "Michelle Kuo",
-"paragraph": "Helena had begun an effort to market an enchanting part of its history, the blues, at the old train depot, which was converted to a museum. The museum shares stories and photos of black musicians who sang in Helena, lived in Helena, visited Helena, used Helena as a stepping-stone to Chicago, or retired in Helena when Chicago didn’t work out. Their names are evocative, often involving infirmity or animals: Blind Lemon Jefferson, Howlin’ Wolf, Super Chikan. Exhibits here have hopeful titles—A Heritage of Determination, reads one, or Struggle in a Bountiful Land—but few visitors."
-}
-*/
-
-export function fetchMeanings(word) {
+export function fetchMeanings(
+  word,
+  paragraph = 'paragraph.',
+  sentence = 'sentence.',
+  bookId = 1,
+) {
   return function (dispatch) {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        axios(
-          'http://3.15.37.149:6010/lookup',
-          {
-            word: 'squares',
-            user_id: '20',
-            sentence: 'Kinship was an assertion',
-            book_name: 'Reading with Patrick',
-            author_name: 'Michelle Kuo',
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
-        ).then(function (response) {
-          console.log(response.data.length);
-          // dispatch(setWordMeanings(response.data));
-        });
-
-        // const meanings = {
-        //   adjective: [],
-        //   pronoun: [],
-        // };
-        // dispatch();
+      axios({
+        url: 'http://127.0.0.1:3000/api/word',
+        method: 'POST',
+        data: {
+          word,
+          paragraph,
+          sentence,
+          bookId,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': 'ff3ee169-7459-4651-bd99-e3324d3d5309',
+        },
+      }).then(function (response) {
+        dispatch(setWordMeanings(response.data.data.meanings));
         resolve();
-      }, 1000);
+      });
     });
   };
 }

@@ -17,6 +17,7 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import {WebView} from 'react-native-webview';
 import {connect} from 'react-redux';
 import StaticServer from 'react-native-static-server';
+import _ from 'lodash';
 
 import RNFS from 'react-native-fs';
 import {logger} from '../utils/logger';
@@ -149,7 +150,7 @@ const Reader = ({
           onMessage={handleMessage}
         />
       </GestureRecognizer>
-      {selectedWord && <DictionaryModal />}
+      {!_.isUndefined(selectedWord) && <DictionaryModal />}
       <TouchableOpacity onPress={goPrev}>
         <Text>Prev</Text>
       </TouchableOpacity>

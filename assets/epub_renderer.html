@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 	<style>
 		body {
 			margin: 0;
@@ -21,9 +22,11 @@
 	</style>
 	<script>
 		function renderEpubFile(fileLocation) {
+			console.log(_.throttle)
 			window.book = ePub(fileLocation);
 			window.rendition = window.book.renderTo('area', { method: 'paginated' });
 			window.rendition.display();
+			const throttledSelectionPostMessage = _.throttle(window.ReactNativeWebView.postMessage, 1500)
 			window.rendition.on('selected', (event) => {
 				let selected =
 					window.rendition.manager &&
@@ -35,16 +38,11 @@
 							.trim()
 						: '';
 				if (selected) {
-					window.ReactNativeWebView.postMessage(
+					throttledSelectionPostMessage(
 						JSON.stringify({ type: 'selected', selected, event }),
 					);
 				}
 			});
-			setTimeout(() => {
-				window.ReactNativeWebView.postMessage(
-					JSON.stringify({ type: 'selected', selected: "Hello world" }),
-				);
-			}, 5000);
 		}
 	</script>
 </head>

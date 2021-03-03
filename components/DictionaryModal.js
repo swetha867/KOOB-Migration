@@ -8,70 +8,83 @@ import {
   FlatList,
   StatusBar,
 } from 'react-native';
+import {Spinner, Icon} from 'native-base';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 import {fetchMeanings} from '../redux/actions/asyncActions';
-import {setWordMeanings} from '../redux/actions/activeBookActions';
-import axios from 'axios';
+import {setSelectedWord} from '../redux/actions/activeBookActions';
 import tailwind from 'tailwind-rn';
-import Tts from 'react-native-tts';
 
-function DictionaryModal({selected_word, dictionar_data, dispatch}) {
-  const [dic, setDic] = useState([]);
+function DictionaryModal({selected_word, meanings, dispatch}) {
   useEffect(() => {
-    axios
-      .post(
-        'http://3.15.37.149:6010/lookup',
-        {
-          word: 'squares',
-          user_id: '20',
-          sentence: 'Kinship was an assertion',
-          book_name: 'Reading with Patrick',
-          author_name: 'Michelle Kuo',
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-      .then(function (response) {
-        console.log('Dictionary Data' + response.data.length);
-        Tts.speak('Dictionary Data fetched' + response.data.length + 'records');
-
-        dispatch(setWordMeanings(response.data));
-        setDic(response.data);
-      });
-    console.log('Dictionary data' + dictionar_data);
-  });
-
-  function speak(word) {
-    Tts.speak('Hello, world!');
+    dispatch(fetchMeanings(selected_word));
+  }, []);
+  let modalContent;
+  if (_.isUndefined(meanings)) {
+    modalContent = (
+      <>
+        <Spinner color="blue"></Spinner>
+      </>
+    );
+  } else {
+    modalContent = meanings.map((meaning_) => {
+      console.log(meaning_);
+      const {pos, meaning, id, teacherVote} = meaning_;
+      return (
+        <View key={id}>
+          <View style={tailwind('flex flex-row items-end pt-2')}>
+            <Text style={tailwind('text-gray-800 text-2xl font-extrabold')}>
+              {selected_word}
+            </Text>
+            <Text style={tailwind('px-2 text-gray-600 text-lg font-medium')}>
+              {pos}
+            </Text>
+          </View>
+          <View style={tailwind('flex flex-row items-end pt-2')}>
+            <Text style={tailwind('text-green-600 text-base font-extrabold')}>
+              {teacherVote}
+              {teacherVote ? '✅' : ''}
+            </Text>
+            <Text
+              style={tailwind(
+                'px-1 text-gray-800 text-base text-justify leading-5 tracking-tighter font-normal',
+              )}>
+              {meaning}
+            </Text>
+          </View>
+        </View>
+      );
+    });
   }
-  const renderItem = ({item}) => <Item title={item.meaning} />;
+
+  // <Text style={tailwind('text-gray-800 text-2xl font-extrabold')}>
+  //         {selected_word}
+  //       </Text>
+  //       {/* <SafeAreaView style={styles.container}>
+  //         <FlatList
+  //           data={dic}
+  //           renderItem={renderItem}
+  //           keyExtractor={(item) => item.id}
+  //         />
+  //       </SafeAreaView> */}
+
   return (
     <Modal
       swipeDirection="down"
       animationOutTiming={100}
       animationInTiming={100}
       hideModalContentWhileAnimating
-      isVisible={true}
+      isVisible={!_.isUndefined(selected_word)}
       backdropColor="rgba(0, 0, 0, 0.6)"
-      style={tailwind('justify-end items-center')}>
-      <View
-        style={tailwind(
-          'pt-4 items-center bg-gray-100 bg-opacity-80 min-w-full rounded',
-        )}>
-        <Text style={tailwind('text-gray-800 text-lg font-extrabold')}>
-          {selected_word}
+      style={tailwind('justify-end')}>
+      <View style={tailwind('pt-4 pb-2 px-4 bg-gray-100 min-w-full rounded')}>
+        <Text
+          style={tailwind('font-bold text-xl text-red-600')}
+          onPress={() => dispatch(setSelectedWord(undefined))}>
+          X
         </Text>
-        {/* <SafeAreaView style={styles.container}>
-          <FlatList
-            data={dic}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
-        </SafeAreaView> */}
+        {modalContent}
       </View>
     </Modal>
   );
@@ -80,7 +93,7 @@ function DictionaryModal({selected_word, dictionar_data, dispatch}) {
 function mapStateToProps(state) {
   return {
     selected_word: state.activeBookReducer.selected_word,
-    dictionar_data: state.activeBookReducer.dictionar_data,
+    meanings: state.activeBookReducer.meanings,
   };
 }
 const styles = StyleSheet.create({
