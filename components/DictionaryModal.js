@@ -15,9 +15,11 @@ import _ from 'lodash';
 import {fetchMeanings} from '../redux/actions/asyncActions';
 import {setSelectedWord} from '../redux/actions/activeBookActions';
 import tailwind from 'tailwind-rn';
+import Tts from 'react-native-tts';
 
 function DictionaryModal({selected_word, meanings, dispatch}) {
   useEffect(() => {
+    Tts.speak(selected_word);
     dispatch(fetchMeanings(selected_word));
   }, []);
   let modalContent;
