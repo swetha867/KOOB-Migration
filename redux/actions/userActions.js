@@ -18,9 +18,7 @@ export const setEmail = (email) => ({
   type: 'USER_SET_EMAIL',
   email,
 });
-export const setCurrentBookName=current_book_name =>({
-    type: 'USER_CURRENT_BOOK_NAME',
-    current_book_name,
+export const setCurrentBookName = (current_book_name) => ({
+  type: 'USER_CURRENT_BOOK_NAME',
+  current_book_name,
 });
-
-//setUser('Hello')-->{type: 'USER_SET_USER', user:hello}

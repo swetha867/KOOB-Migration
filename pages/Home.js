@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, Image} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';

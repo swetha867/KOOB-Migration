@@ -3,6 +3,8 @@ const INITIAL_STATE = {
   book_location: undefined,
   selected_word: undefined,
   meanings: undefined,
+  author_name: '',
+  book_name: '',
 };
 
 const activeBookReducer = (state = INITIAL_STATE, action) => {
@@ -26,6 +28,16 @@ const activeBookReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         meanings: action.meanings,
+      };
+    case 'ACTIVE_BOOK_NAME':
+      return {
+        ...state,
+        meanings: action.book_name,
+      };
+    case 'ACTIVE_BOOK_AUTHOR_NAME':
+      return {
+        ...state,
+        meanings: action.author_name,
       };
     default:
       return state;

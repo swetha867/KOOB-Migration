@@ -17,3 +17,11 @@ export const setWordMeanings = (meanings) => ({
   type: 'ACTIVE_BOOK_SELECTED_WORD_MEANINGS',
   meanings,
 });
+export const setBookName = (book_name) => ({
+  type: 'ACTIVE_BOOK_NAME',
+  meanings,
+});
+export const setAuthorName = (author_name) => ({
+  type: 'ACTIVE_BOOK_AUTHOR_NAME',
+  meanings,
+});

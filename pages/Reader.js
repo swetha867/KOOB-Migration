@@ -12,13 +12,25 @@ import {
   TouchableOpacity,
   Platform,
   useWindowDimensions,
+  View,
 } from 'react-native';
+import {
+  Container,
+  Header,
+  Content,
+  Footer,
+  Title,
+  ActionSheet,
+} from 'native-base';
+import SideMenu from 'react-native-side-menu';
+
 import GestureRecognizer from 'react-native-swipe-gestures';
 import {WebView} from 'react-native-webview';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
+import Slider from 'react-native-slider';
 import StaticServer from 'react-native-static-server';
 import _ from 'lodash';
-
 import RNFS from 'react-native-fs';
 import {logger} from '../utils/logger';
 
@@ -31,6 +43,8 @@ import {EPUB_IMPORT_LOCAL_DIR_NAME} from '../constants';
 import {
   setSelectedWord,
   setActiveBookLocation,
+  setAuthorName,
+  setBookName,
 } from '../redux/actions/activeBookActions';
 
 const config = {
@@ -46,8 +60,9 @@ const Reader = ({
 }) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
-
+  const [sliderValue, setSliderValue] = useState(1);
   const serverConfig = {localOnly: true, keepAlive: true};
+  const [isDrawer, setDrawer] = useState(false);
   const webview = useRef();
 
   function startServer() {
@@ -87,17 +102,25 @@ const Reader = ({
       `(function() {window.rendition.next();})()`,
     );
   }
+  function openDictionary() {
+    return <DictionaryModal></DictionaryModal>;
+  }
 
   function handleMessage(e) {
-    let parsedData = JSON.parse(e.nativeEvent.data);
-    delete parsedData.type;
     const {selected, event} = parsedData;
     console.log(event);
     dispatch(setSelectedWord(selected));
-    const {locations, event1} = parsedData;
-    dispatch(setActiveBookLocation(locations));
-    console.log(event1);
-
+    // let parsedData = JSON.parse(e.nativeEvent.data);
+    // let {type} = parsedData;
+    // console.log('type' + type);
+    // let parsedData = JSON.parse(e.nativeEvent.data);
+    // delete parsedData.type;
+    // const {selected, event} = parsedData;
+    // console.log(event);
+    // dispatch(setSelectedWord(selected));
+    // const {locations, event1} = parsedData;
+    // dispatch(setActiveBookLocation(locations));
+    // console.log(event1);
     // switch (type) {
     //   case 'selected': {
     //     setSelectedText(parsedData.selected);
@@ -135,8 +158,13 @@ const Reader = ({
   if (selectedWord !== undefined) {
     console.log('selectedWord check', selectedWord);
   }
+  const contents = <Text>Content2 </Text>;
   return (
-    <>
+    <SideMenu
+      menu={contents}
+      isOpen={isDrawer}
+      menuPosition="right"
+      onChange={setDrawer}>
       <GestureRecognizer
         onSwipeLeft={goPrev}
         onSwipeRight={goNext}
@@ -150,14 +178,52 @@ const Reader = ({
           onMessage={handleMessage}
         />
       </GestureRecognizer>
-      {!_.isUndefined(selectedWord) && <DictionaryModal />}
-      <TouchableOpacity onPress={goPrev}>
-        <Text>Prev</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={goNext}>
-        <Text>next</Text>
-      </TouchableOpacity>
-    </>
+      {/* {!_.isUndefined(selectedWord) && <DictionaryModal />} */}
+      <Footer style={styles.wrapper}>
+        <TouchableOpacity onPress={openDictionary}>
+          <View>
+            <Icon name="volume-up" size={20} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={openDictionary}>
+          <View>
+            <Icon name="volume-off" size={20} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={openDictionary}>
+          <View>
+            <Icon name="microphone" size={20} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={goPrev}>
+          <Text>Prev</Text>
+        </TouchableOpacity>
+        <Slider
+          style={styles.slider}
+          maximumValue={100}
+          minimumValue={0}
+          value={sliderValue}
+          onValueChange={(value) => setSliderValue(parseInt(value))}>
+          <Text>Value:{sliderValue} </Text>
+        </Slider>
+        <TouchableOpacity onPress={goNext}>
+          <Text>next</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={openDictionary}>
+          <View>
+            <Icon name="book" size={20} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            Actions.reader();
+          }}>
+          <View>
+            <Icon name="times" size={20} />
+          </View>
+        </TouchableOpacity>
+      </Footer>
+    </SideMenu>
   );
 };
 
@@ -170,3 +236,21 @@ const mapStateToProps = (state) => {
   };
 };
 export default connect(mapStateToProps)(Reader);
+const styles = {
+  wrapper: {
+    marginLeft: 10,
+    marginRight: 10,
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+
+  slider: {
+    width: '35%',
+    height: 6,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+};

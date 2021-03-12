@@ -15,10 +15,13 @@ import _ from 'lodash';
 import {fetchMeanings} from '../redux/actions/asyncActions';
 import {setSelectedWord} from '../redux/actions/activeBookActions';
 import tailwind from 'tailwind-rn';
+import Tts from 'react-native-tts';
 
 function DictionaryModal({selected_word, meanings, dispatch}) {
+  const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     dispatch(fetchMeanings(selected_word));
+    setModalVisible(false);
   }, []);
   let modalContent;
   if (_.isUndefined(meanings)) {
@@ -75,8 +78,11 @@ function DictionaryModal({selected_word, meanings, dispatch}) {
       animationOutTiming={100}
       animationInTiming={100}
       hideModalContentWhileAnimating
-      isVisible={!_.isUndefined(selected_word)}
+      isVisible={modalVisible}
       backdropColor="rgba(0, 0, 0, 0.6)"
+      onRequestClose={() => {
+        setModalVisible(false);
+      }}
       style={tailwind('justify-end')}>
       <View style={tailwind('pt-4 pb-2 px-4 bg-gray-100 min-w-full rounded')}>
         <Text
