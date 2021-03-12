@@ -20,6 +20,7 @@ import Tts from 'react-native-tts';
 function DictionaryModal({selected_word, meanings, dispatch}) {
   const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
+    Tts.speak(selected_word);
     dispatch(fetchMeanings(selected_word));
     setModalVisible(false);
   }, []);
