@@ -23,6 +23,7 @@ import {
   ActionSheet,
 } from 'native-base';
 import SideMenu from 'react-native-side-menu';
+import {Actions} from 'react-native-router-flux';
 
 import GestureRecognizer from 'react-native-swipe-gestures';
 import {WebView} from 'react-native-webview';
@@ -45,6 +46,8 @@ import {
   setActiveBookLocation,
   setAuthorName,
   setBookName,
+  setSelectedWordinParagraph,
+  setSelectedWordinSentence,
 } from '../redux/actions/activeBookActions';
 
 const config = {
@@ -103,13 +106,37 @@ const Reader = ({
     );
   }
   function openDictionary() {
-    return <DictionaryModal></DictionaryModal>;
+    dispatch(setSelectedWord('squares'));
+    dispatch(setAuthorName('Michelle Kuo'));
+    dispatch(setBookName('Reading with Patrick'));
+    dispatch(setSelectedWordinSentence('Kinship was an assertion'));
+    dispatch(
+      setSelectedWordinParagraph(
+        'Helena had begun an effort to market an enchanting part of its history, the blues, at the old train depot, which was converted to a museum. The museum shares stories and photos of black musicians who sang in Helena, lived in Helena, visited Helena, used Helena as a stepping-stone to Chicago, or retired in Helena when Chicago didn’t work out. Their names are evocative, often involving infirmity or animals: Blind Lemon Jefferson, Howlin’ Wolf, Super Chikan. Exhibits here have hopeful titles—A Heritage of Determination, reads one, or Struggle in a Bountiful Land—but few visitors.',
+      ),
+    );
+    return Actions.dictionary();
   }
 
   function handleMessage(e) {
+    /*
+setSelectedWord,
+  setActiveBookLocation,
+  setAuthorName,
+  setBookName,
+  setSelectedWordinParagraph,
+  setSelectedWordinSentence,    */
     const {selected, event} = parsedData;
     console.log(event);
-    dispatch(setSelectedWord(selected));
+    dispatch(setSelectedWord('squares'));
+    dispatch(setAuthorName('Michelle Kuo'));
+    dispatch(setBookName('Reading with Patrick'));
+    dispatch(setSelectedWordinSentence('Kinship was an assertion'));
+    dispatch(
+      setSelectedWordinParagraph(
+        'Helena had begun an effort to market an enchanting part of its history, the blues, at the old train depot, which was converted to a museum. The museum shares stories and photos of black musicians who sang in Helena, lived in Helena, visited Helena, used Helena as a stepping-stone to Chicago, or retired in Helena when Chicago didn’t work out. Their names are evocative, often involving infirmity or animals: Blind Lemon Jefferson, Howlin’ Wolf, Super Chikan. Exhibits here have hopeful titles—A Heritage of Determination, reads one, or Struggle in a Bountiful Land—but few visitors.',
+      ),
+    );
     // let parsedData = JSON.parse(e.nativeEvent.data);
     // let {type} = parsedData;
     // console.log('type' + type);

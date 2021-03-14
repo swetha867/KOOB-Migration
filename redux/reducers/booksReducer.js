@@ -13,6 +13,7 @@ const booksReducer = (state = INITIAL_STATE, action) => {
         books: state.books.concat({
           file_name: action.payload.file_name,
           title: action.payload.book_title,
+          coverUrl: null,
         }),
       });
     }

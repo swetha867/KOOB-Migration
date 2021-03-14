@@ -1,4 +1,7 @@
 import React, {useState, useEffect} from 'react';
+// import {ListItem, Badge, Avatar} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import {
   View,
   Text,
@@ -7,37 +10,71 @@ import {
   StyleSheet,
   FlatList,
   StatusBar,
+  Button,
 } from 'react-native';
-import {Spinner, Icon} from 'native-base';
+import {Spinner} from 'native-base';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 import _ from 'lodash';
-import {fetchMeanings} from '../redux/actions/asyncActions';
+import {fetchMeanings, fetchImages} from '../redux/actions/asyncActions';
 import {setSelectedWord} from '../redux/actions/activeBookActions';
 import tailwind from 'tailwind-rn';
 import Tts from 'react-native-tts';
+import {SliderBox} from 'react-native-image-slider-box';
 
-function DictionaryModal({selected_word, meanings, dispatch}) {
-  const [modalVisible, setModalVisible] = useState(false);
+function DictionaryModal({
+  selected_word,
+  meanings,
+  selected_paragraph,
+  selected_sentence,
+  book_name,
+  author_name,
+  wordImages,
+  dispatch,
+}) {
+  const [modalVisible, setModalVisible] = useState(true);
+  const [dict, setDict] = useState([]);
+  const [images, setImages] = useState([
+    'https://source.unsplash.com/1024x768/?nature',
+    'https://source.unsplash.com/1024x768/?water',
+    'https://source.unsplash.com/1024x768/?tree',
+  ]);
   useEffect(() => {
-    Tts.speak(selected_word);
-    dispatch(fetchMeanings(selected_word));
-    setModalVisible(false);
+    // alert(selected_word);
+    // Tts.speak('selected_word');
+    // alert(selected_word);
+    dispatch(
+      fetchMeanings(
+        'squares',
+        '20',
+        selected_sentence,
+        selected_paragraph,
+        book_name,
+        author_name,
+      ),
+    );
+    dispatch(fetchImages(selected_word));
+    alert(wordImages);
+    setModalVisible(true);
   }, []);
   let modalContent;
-  if (_.isUndefined(meanings)) {
-    modalContent = (
-      <>
-        <Spinner color="blue"></Spinner>
-      </>
-    );
-  } else {
-    modalContent = meanings.map((meaning_) => {
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  // if (_.isUndefined(meanings)) {
+  //   modalContent = (
+  //     <>
+  //       <Spinner color="blue"></Spinner>
+  //     </>
+  //   );
+  // } else {
+  /*modalContent = meanings.map((meaning_) => {
       console.log(meaning_);
       const {pos, meaning, id, teacherVote} = meaning_;
       return (
         <View key={id}>
-          <View style={tailwind('flex flex-row items-end pt-2')}>
+          <View style={tailwind('flex-row')}>
             <Text style={tailwind('text-gray-800 text-2xl font-extrabold')}>
               {selected_word}
             </Text>
@@ -59,9 +96,19 @@ function DictionaryModal({selected_word, meanings, dispatch}) {
           </View>
         </View>
       );
-    });
-  }
-
+    });*/
+  modalContent = Object.keys(meanings).map((meaning_, index) => {
+    return (
+      <View style={tailwind('px-1 pb-2 bg-gray-100 ')}>
+        <TouchableOpacity>
+          <Text>
+            {meanings[meaning_].count} {'  '}
+            {meanings[meaning_].meaning}:{meanings[meaning_].fl}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  });
   // <Text style={tailwind('text-gray-800 text-2xl font-extrabold')}>
   //         {selected_word}
   //       </Text>
@@ -71,7 +118,8 @@ function DictionaryModal({selected_word, meanings, dispatch}) {
   //           renderItem={renderItem}
   //           keyExtractor={(item) => item.id}
   //         />
-  //       </SafeAreaView> */}
+  //       </SafeAreaView> */
+  // }
 
   return (
     <Modal
@@ -85,14 +133,21 @@ function DictionaryModal({selected_word, meanings, dispatch}) {
         setModalVisible(false);
       }}
       style={tailwind('justify-end')}>
-      <View style={tailwind('pt-4 pb-2 px-4 bg-gray-100 min-w-full rounded')}>
-        <Text
-          style={tailwind('font-bold text-xl text-red-600')}
-          onPress={() => dispatch(setSelectedWord(undefined))}>
-          X
-        </Text>
-        {modalContent}
-      </View>
+      <SliderBox autoplay={true} circleLoop={true} images={images} />
+      <TouchableOpacity
+        style={tailwind('pt-4 pb-2 px-4 bg-gray-100 min-w-full rounded')}
+        onPress={() => setModalVisible(false)}>
+        <View style={tailwind('font-bold text-xl text-red-600')}>
+          <Icon name="times" size={20} />
+        </View>
+      </TouchableOpacity>
+
+      <View>{modalContent}</View>
+      <TouchableOpacity>
+        <View style={tailwind('font-bold text-xl text-red-600')}>
+          <Text> Vote</Text>
+        </View>
+      </TouchableOpacity>
     </Modal>
   );
 }
@@ -101,6 +156,11 @@ function mapStateToProps(state) {
   return {
     selected_word: state.activeBookReducer.selected_word,
     meanings: state.activeBookReducer.meanings,
+    author_name: state.activeBookReducer.author_name,
+    book_name: state.activeBookReducer.book_name,
+    selected_sentence: state.activeBookReducer.selected_sentence,
+    selected_paragraph: state.activeBookReducer.selected_paragraph,
+    wordImages: state.activeBookReducer.images,
   };
 }
 const styles = StyleSheet.create({

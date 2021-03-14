@@ -5,7 +5,7 @@ import axios from 'axios';
 import {EPUB_IMPORT_LOCAL_DIR_NAME} from '../../constants';
 import {addBook} from './bookActions';
 import {logger} from '../../utils/logger';
-import {setWordMeanings} from './activeBookActions';
+import {setWordMeanings, setWordImages} from './activeBookActions';
 
 export function addBookAsyncAction(url, book_title) {
   return function (dispatch) {
@@ -29,12 +29,32 @@ export function addBookAsyncAction(url, book_title) {
     });
   };
 }
-
+export function fetchImages(word) {
+  return function (dispatch) {
+    return new Promise((resolve) => {
+      axios({
+        url:
+          'https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=' +
+          'squares',
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          //'x-token': 'ff3ee169-7459-4651-bd99-e3324d3d5309',
+        },
+      }).then(function (response) {
+        dispatch(setWordImages(response));
+        resolve();
+      });
+    });
+  };
+}
 export function fetchMeanings(
   word,
-  paragraph = 'paragraph.',
-  sentence = 'sentence.',
-  bookId = 1,
+  user_id,
+  sentence,
+  paragraph,
+  book_name,
+  author_name,
 ) {
   return function (dispatch) {
     return new Promise((resolve) => {
@@ -65,3 +85,14 @@ export function fetchMeanings(
     });
   };
 }
+/*
+ type: "POST",
+        url: "http://3.15.37.149:6010/votes",
+        data: {
+          user_id: window.localStorage.getItem('reader_user_id'),
+          meaning_id: result.meaning_id,
+          word_id: result.word_id,
+          sentence: localStorage.sentence,
+          book_name: window.bookKaMeta.bookTitle,
+          author_name: window.bookKaMeta.creator,
+*/

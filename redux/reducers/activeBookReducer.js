@@ -5,6 +5,9 @@ const INITIAL_STATE = {
   meanings: undefined,
   author_name: '',
   book_name: '',
+  selected_sentence: '',
+  selected_paragraph: '',
+  images: [],
 };
 
 const activeBookReducer = (state = INITIAL_STATE, action) => {
@@ -24,10 +27,25 @@ const activeBookReducer = (state = INITIAL_STATE, action) => {
         ...state,
         selected_word: action.selected_word,
       };
+    case 'ACTIVE_BOOK_SELECTED_PARAGRAPH':
+      return {
+        ...state,
+        selected_word: action.selected_paragraph,
+      };
+    case 'ACTIVE_BOOK_SELECTED_SENTENCE':
+      return {
+        ...state,
+        selected_word: action.selected_sentence,
+      };
     case 'ACTIVE_BOOK_SELECTED_WORD_MEANINGS':
       return {
         ...state,
         meanings: action.meanings,
+      };
+    case 'ACTIVE_BOOK_SELECTED_WORD_IMAGES':
+      return {
+        ...state,
+        images: action.images,
       };
     case 'ACTIVE_BOOK_NAME':
       return {
