@@ -33,30 +33,24 @@ React.useEffect(() => {
 
 }, []);
 
-
-
   const login = () => {
-
-    axios(
-      'http://3.15.37.149:6010/users/',
-      {
+    axios({
+      url: 'http://3.15.37.149:6010/users/',
+      data: {
         email: email,
         student_id: student_id,
       },
-      {
-        headers: {
+      method: 'POST',
+      headers: {
           'Content-Type': 'application/json',
-        },
       },
-    ).then(function (response) {
-      alert(response.data)
+    }).then(function (response) {
       if (response.user_id != 0) {
         dispatch(setIsLoggedIn(true));
         dispatch(setIsTeacher(response.data.isTeacher));
         dispatch(setUserID(response.data.user_id));
-        logger.info(`User loggen in with studentId ${student_id}`);
+        logger.info(`User logged in with studentId ${student_id}`);
         return Actions.home();
-
       } else {
         dispatch(setIsLoggedIn(false));
       }
@@ -67,8 +61,6 @@ React.useEffect(() => {
   
 
   return (
-   
-
     <Container>
       <Header style={{backgroundColor: 'black'}}>
         <Body>
