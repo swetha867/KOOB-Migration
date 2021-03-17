@@ -24,9 +24,10 @@ export default function Root() {
   return (
     <Router>
       <Stack key="root">
+      <Scene key="login" component={Login} title="Login" />
+
         <Scene key="home" component={Home} />
 
-        <Scene key="login" component={Login} title="Login" />
         <Scene key="learning" component={Learning} title="Learning" />
         <Scene key="reader" component={Reader} title="Reader" />
         <Scene

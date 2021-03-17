@@ -12,8 +12,7 @@ import {
 } from 'native-base';
 import {default as React} from 'react';
 import {connect} from 'react-redux';
-// import Home from './Home';
-// import { AsyncStorage } from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import {
   setEmail,
   setIsLoggedIn,
@@ -21,9 +20,23 @@ import {
   setStudentId,
   setUserID,
 } from '../redux/actions/userActions';
+import axios from 'axios';
+import {logger} from '../utils/logger';
 
-const Login = ({email, student_id, isLoggedIn, dispatch}) => {
+const Login = ({email, student_id, isLoggedIn,isTeacher,userId, dispatch}) => {
+  
+React.useEffect(() => {
+  alert(userId)
+  if(isLoggedIn){
+    return Actions.home();
+  }
+
+}, []);
+
+
+
   const login = () => {
+
     axios(
       'http://3.15.37.149:6010/users/',
       {
@@ -36,61 +49,31 @@ const Login = ({email, student_id, isLoggedIn, dispatch}) => {
         },
       },
     ).then(function (response) {
-      if (response.data.user_id != 0) {
+      alert(response.data)
+      if (response.user_id != 0) {
         dispatch(setIsLoggedIn(true));
         dispatch(setIsTeacher(response.data.isTeacher));
         dispatch(setUserID(response.data.user_id));
+        logger.info(`User loggen in with studentId ${student_id}`);
+        return Actions.home();
+
       } else {
         dispatch(setIsLoggedIn(false));
       }
-      alert(isLoggedIn);
     });
+
+    
   };
-  // if(isLoggedIn){
-  //  // navigation.navigate('Home');
-  //  navigate('home');
-  // }
-  // this.props.login(this.state.email,this.state.password).then(() => {
-  //   if(this.props.error){
-  //     alert(this.props.error)
-  //   }
-  //   else{
-  //     alert(this.props.userData.user.name+' user successfully logged in ')
-  //   }
-  // })
+  
 
   return (
-    // <View style={{flex:2}}>
-    //          <Text style={{marginTop:40,color:'black',textAlign:'center'}}>Koob Epub Reader</Text>
-    //          <FormItem floatingLabel>
-    //       <Label>Email</Label>
-    //      <Input /> </FormItem>
-    //      <FormItem floatingLabel>
-    //       <Label>Student ID</Label>
-    //      <Input /> </FormItem>
-    //    {/* <TextInput autoCapitalize="none" style={styles.input} placeholder="SFSU Email Address" value={email} onChangeText={(e) => dispatch(setEmail(e))}/> */}
-    //   <TextInput autoCapitalize="none"   style={styles.input} placeholder="Student ID" value={student_id} onChangeText={(e) => dispatch(setStudentId(e))}/>
-    //   <TouchableOpacity onPress={() =>login()}>
-    //     <Text style={{marginTop:20,color:'black',textAlign:'center'}}>
-    //       Login
-    //     </Text>
-    //   </TouchableOpacity>
-    //   </View>
+   
 
     <Container>
       <Header style={{backgroundColor: 'black'}}>
         <Body>
-          <Title style={{alignSelf: 'center'}}>Reader</Title>
+          <Title style={{marginLeft: 70,alignSelf: 'center'}}>Reader</Title>
         </Body>
-        {/* <Button iconLeft dark>
-    <Icon name='cog' />
-    <Text>Settings</Text>
-    </Button>
-
-    <Button iconLeft dark>
-    <Icon name='cog' />
-    <Text>Add Books</Text>
-  </Button> */}
       </Header>
 
       <Form>
@@ -98,12 +81,10 @@ const Login = ({email, student_id, isLoggedIn, dispatch}) => {
           floatingLabel
           style={{marginLeft: 75, marginRight: 75, marginTop: 100}}>
           <Label>SFSU Email Address</Label>
-          {/* onChangeText={(e) => dispatch(setEmail(e))}  */}
           <Input onChangeText={(e) => dispatch(setEmail(e))} />
         </FormItem>
         <FormItem floatingLabel style={{marginLeft: 75, marginRight: 75}}>
           <Label>Student Id</Label>
-          {/* onChangeText={(e) => dispatch(setStudentId(e))} */}
           <Input onChangeText={(e) => dispatch(setStudentId(e))} />
         </FormItem>
 
@@ -118,17 +99,14 @@ const Login = ({email, student_id, isLoggedIn, dispatch}) => {
     </Container>
   );
 };
-// const AppNavigator = StackNavigator({
-//   First: {
-//     home: Home,
-//   }
-// });
+
 const mapStateToProps = (state) => {
   return {
     email: state.userReducer.email,
     student_id: state.userReducer.student_id,
     isLoggedIn: state.userReducer.isLoggedIn,
-    // navigation: state.navigation
+    isTeacher: state.userReducer.isTeacher,
+    userId: state.userReducer.userId
   };
 };
 
