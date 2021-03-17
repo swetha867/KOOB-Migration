@@ -22,7 +22,6 @@
 	</style>
 	<script>
 		function renderEpubFile(fileLocation) {
-			console.log(_.throttle)
 			window.book = ePub(fileLocation);
 			window.rendition = window.book.renderTo('area', { method: 'paginated' });
 			window.rendition.display();
@@ -38,8 +37,12 @@
 							.trim()
 						: '';
 				if (selected) {
+					// TODO: this logic seems to error out on chapter ending
+					var range = rendition.getRange(rendition.currentLocation().start.cfi);
+					var endRange = rendition.getRange(rendition.currentLocation().end.cfi);
+					range.setEnd(endRange.startContainer, endRange.startOffset);
 					throttledSelectionPostMessage(
-						JSON.stringify({ type: 'selected', selected, event }),
+						JSON.stringify({ type: 'selected', selected, event, data: range.toString() }),
 					);
 				}
 			});

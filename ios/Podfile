@@ -14,9 +14,10 @@ target 'Reader' do
 
   pod 'react-native-get-random-values', :path => '../node_modules/react-native-get-random-values'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'ReaderTests' do
     inherit! :complete

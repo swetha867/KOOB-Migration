@@ -107,7 +107,7 @@ const Reader = ({
     );
   }
   function openDictionary() {
-  //  alert(selectedWord)
+    //alert("selectedWord")
     dispatch(setSelectedWordinSentence('Kinship was an assertion'));
     dispatch(
       setSelectedWordinParagraph(
@@ -118,41 +118,27 @@ const Reader = ({
   }
 
   function onMessage(e) {
-
-    alert(e.nativeEvent.data);
     let parsedData = JSON.parse(e.nativeEvent.data);
-    let { type } = parsedData;
-		delete parsedData.type;
+    let { type, selected, data } = parsedData;
+    console.log("selected:: ", selected);
+    console.log("data:: ", data);
+    console.log(e.nativeEvent.data);
 		switch (type) {
 			case 'selected': {
-
-        alert(parsedData.sentence)
-        dispatch(setSelectedWord(parsedData.sentenceCfi));
-				// setSelectedText(parsedData.selected);
-				// if (parsedData.selected.length < 40) setModal(true);
-				// return;
+        dispatch(setSelectedWord(selected));
 			}
 			case 'loc': {
 			}
 			case 'key':
 			case 'metadata':{
-    // dispatch(setSelectedWordinSentence('Kinship was an assertion'));
-//dispatch(setSelectedWordinParagraph(
         dispatch(setAuthorName(parsedData.author));
         dispatch(setBookName(parsedData.title));
-       // alert(parsedData.coverUrl)
       }
 			case 'contents':
 			case 'locations':
-        
-		
 			default:
 				return;
 		}
-    alert(selectedWord)
-	
-
-   
   }
 
   let platform_independent_webview_source;
