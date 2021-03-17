@@ -30,12 +30,12 @@ const activeBookReducer = (state = INITIAL_STATE, action) => {
     case 'ACTIVE_BOOK_SELECTED_PARAGRAPH':
       return {
         ...state,
-        selected_word: action.selected_paragraph,
+        selected_paragraph: action.selected_paragraph,
       };
     case 'ACTIVE_BOOK_SELECTED_SENTENCE':
       return {
         ...state,
-        selected_word: action.selected_sentence,
+        selected_sentence: action.selected_sentence,
       };
     case 'ACTIVE_BOOK_SELECTED_WORD_MEANINGS':
       return {
@@ -50,12 +50,12 @@ const activeBookReducer = (state = INITIAL_STATE, action) => {
     case 'ACTIVE_BOOK_NAME':
       return {
         ...state,
-        meanings: action.book_name,
+        book_name: action.book_name,
       };
     case 'ACTIVE_BOOK_AUTHOR_NAME':
       return {
         ...state,
-        meanings: action.author_name,
+        author_name: action.author_name,
       };
     default:
       return state;

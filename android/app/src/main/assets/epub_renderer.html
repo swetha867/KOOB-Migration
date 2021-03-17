@@ -22,27 +22,60 @@
 	</style>
 	<script>
 		function renderEpubFile(fileLocation) {
-			console.log(_.throttle)
 			window.book = ePub(fileLocation);
 			window.rendition = window.book.renderTo('area', { method: 'paginated' });
 			window.rendition.display();
-			const throttledSelectionPostMessage = _.throttle(window.ReactNativeWebView.postMessage, 1500)
-			window.rendition.on('selected', (event) => {
-				let selected =
-					window.rendition.manager &&
-						window.rendition.manager.getContents().length > 0
-						? window.rendition.manager
-							.getContents()[0]
-							.window.getSelection()
-							.toString()
-							.trim()
-						: '';
-				if (selected) {
-					throttledSelectionPostMessage(
-						JSON.stringify({ type: 'selected', selected, event }),
+		// 	if (window.LOCATIONS) {
+		// 	window.book.locations.load(window.LOCATIONS);
+		// } else {
+			window.book.ready.then(() => {
+				window.book.locations.generate(1650).then(() => {
+					window.ReactNativeWebView.postMessage(
+						JSON.stringify({ type: 'locations', locations: window.book.locations.save() })
 					);
-				}
+				});
 			});
+		// }
+			
+		window.rendition.on('started', () => {
+		//	window.rendition.display(window.BOOK_LOCATION);
+			window.ReactNativeWebView.postMessage(
+				JSON.stringify({ type: 'key', key: window.book.key() })
+			);
+		});
+
+			// Cover url
+			window.book.ready.then(() => {
+				var coverUrl=null;
+ 			 window.book.coverUrl().then((url) => {
+				coverUrl=url;
+				console.log("Cover Url"+url)
+ 		 });
+		})
+
+			//const throttledSelectionPostMessage = _.throttle(window.ReactNativeWebView.postMessage, 1500)
+			window.book.loaded.metadata.then((metadata) => {
+
+			window.ReactNativeWebView.postMessage(
+				JSON.stringify({
+					type: 'metadata',
+					title: metadata.title,
+					author: metadata.creator,
+				})
+			);
+		});
+		
+		
+		window.rendition.on("selected", (cfiRange, contents) => {
+
+		const frontPart = cfiRange.substring(cfiRange.indexOf(","), 0);
+		const lastChildNode = contents.window.getSelection().baseNode.parentNode.childNodes;
+		const sentenceCfi = frontPart + ",/1:0,/" + lastChildNode.length + ":" + lastChildNode[lastChildNode.length - 1].length + ")";
+		alert(sentenceCfi)
+		window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'selected',
+		sentence: sentenceCfi }));
+});
+	
 		}
 	</script>
 </head>

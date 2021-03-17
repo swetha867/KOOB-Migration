@@ -66,6 +66,7 @@ const Reader = ({
   const [sliderValue, setSliderValue] = useState(1);
   const serverConfig = {localOnly: true, keepAlive: true};
   const [isDrawer, setDrawer] = useState(false);
+  const[locations,setLocations]=useState([]);
   const webview = useRef();
 
   function startServer() {
@@ -106,9 +107,7 @@ const Reader = ({
     );
   }
   function openDictionary() {
-    dispatch(setSelectedWord('squares'));
-    dispatch(setAuthorName('Michelle Kuo'));
-    dispatch(setBookName('Reading with Patrick'));
+  //  alert(selectedWord)
     dispatch(setSelectedWordinSentence('Kinship was an assertion'));
     dispatch(
       setSelectedWordinParagraph(
@@ -118,59 +117,42 @@ const Reader = ({
     return Actions.dictionary();
   }
 
-  function handleMessage(e) {
-    /*
-setSelectedWord,
-  setActiveBookLocation,
-  setAuthorName,
-  setBookName,
-  setSelectedWordinParagraph,
-  setSelectedWordinSentence,    */
-    const {selected, event} = parsedData;
-    console.log(event);
-    dispatch(setSelectedWord('squares'));
-    dispatch(setAuthorName('Michelle Kuo'));
-    dispatch(setBookName('Reading with Patrick'));
-    dispatch(setSelectedWordinSentence('Kinship was an assertion'));
-    dispatch(
-      setSelectedWordinParagraph(
-        'Helena had begun an effort to market an enchanting part of its history, the blues, at the old train depot, which was converted to a museum. The museum shares stories and photos of black musicians who sang in Helena, lived in Helena, visited Helena, used Helena as a stepping-stone to Chicago, or retired in Helena when Chicago didn’t work out. Their names are evocative, often involving infirmity or animals: Blind Lemon Jefferson, Howlin’ Wolf, Super Chikan. Exhibits here have hopeful titles—A Heritage of Determination, reads one, or Struggle in a Bountiful Land—but few visitors.',
-      ),
-    );
-    // let parsedData = JSON.parse(e.nativeEvent.data);
-    // let {type} = parsedData;
-    // console.log('type' + type);
-    // let parsedData = JSON.parse(e.nativeEvent.data);
-    // delete parsedData.type;
-    // const {selected, event} = parsedData;
-    // console.log(event);
-    // dispatch(setSelectedWord(selected));
-    // const {locations, event1} = parsedData;
-    // dispatch(setActiveBookLocation(locations));
-    // console.log(event1);
-    // switch (type) {
-    //   case 'selected': {
-    //     setSelectedText(parsedData.selected);
-    //     if (parsedData.selected.length < 40) setModal(true);
-    //     return;
-    //   }
-    //   case 'loc': {
-    //     const {progress, totalPages} = parsedData;
-    //     props.addMetadata({progress, totalPages}, params.index);
-    //     delete parsedData.progress;
-    //     delete parsedData.totalPages;
-    //     return props.addLocation(parsedData);
-    //   }
-    //   case 'key':
-    //   case 'metadata':
-    //   case 'contents':
-    //   case 'locations':
-    //     return props.addMetadata(parsedData, params.index);
-    //   case 'search':
-    //     return setSearchResults(parsedData.results);
-    //   default:
-    //     return;
-    // }
+  function onMessage(e) {
+
+    alert(e.nativeEvent.data);
+    let parsedData = JSON.parse(e.nativeEvent.data);
+    let { type } = parsedData;
+		delete parsedData.type;
+		switch (type) {
+			case 'selected': {
+
+        alert(parsedData.sentence)
+        dispatch(setSelectedWord(parsedData.sentenceCfi));
+				// setSelectedText(parsedData.selected);
+				// if (parsedData.selected.length < 40) setModal(true);
+				// return;
+			}
+			case 'loc': {
+			}
+			case 'key':
+			case 'metadata':{
+    // dispatch(setSelectedWordinSentence('Kinship was an assertion'));
+//dispatch(setSelectedWordinParagraph(
+        dispatch(setAuthorName(parsedData.author));
+        dispatch(setBookName(parsedData.title));
+       // alert(parsedData.coverUrl)
+      }
+			case 'contents':
+			case 'locations':
+        
+		
+			default:
+				return;
+		}
+    alert(selectedWord)
+	
+
+   
   }
 
   let platform_independent_webview_source;
@@ -202,7 +184,7 @@ setSelectedWord,
         <WebView
           ref={webview}
           source={platform_independent_webview_source}
-          onMessage={handleMessage}
+          onMessage={onMessage}
         />
       </GestureRecognizer>
       {/* {!_.isUndefined(selectedWord) && <DictionaryModal />} */}
