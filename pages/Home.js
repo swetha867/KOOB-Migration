@@ -22,10 +22,7 @@ import {
 } from 'native-base';
 
 import {addBookAsyncAction} from '../redux/actions/asyncActions';
-import {
-  setActiveBookFileName,
-  setActiveBookLocation,
-} from '../redux/actions/activeBookActions';
+import {setActiveBookFileName, setActiveBookLocation} from '../redux/actions/activeBookActions';
 
 import {logger} from '../utils/logger';
 
@@ -73,11 +70,7 @@ const Home = ({books, dispatch}) => {
           <Text style={{color: 'white'}}> HOME </Text>
         </Body>
         <Right>
-          <Icon.Button
-            name="plus"
-            onPress={handleFilePicker}
-            dark
-            backgroundColor="black">
+          <Icon.Button name="plus" onPress={handleFilePicker} dark backgroundColor="black">
             <Text style={{color: 'white'}}>Add Books</Text>
           </Icon.Button>
         </Right>

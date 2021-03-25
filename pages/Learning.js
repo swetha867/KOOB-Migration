@@ -1,17 +1,5 @@
 import axios from 'axios';
-import {
-  Badge,
-  Body,
-  Button,
-  Container,
-  Content,
-  Footer,
-  FooterTab,
-  Header,
-  Text,
-  Title,
-  View,
-} from 'native-base';
+import {Badge, Body, Button, Container, Content, Footer, FooterTab, Header, Text, Title, View} from 'native-base';
 import React from 'react';
 import {connect} from 'react-redux';
 
