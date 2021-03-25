@@ -10,9 +10,9 @@ import {
   Text,
   Title,
 } from 'native-base';
-import {default as React} from 'react';
-import {connect} from 'react-redux';
-import {Actions} from 'react-native-router-flux';
+import { default as React } from 'react';
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import {
   setEmail,
   setIsLoggedIn,
@@ -21,17 +21,17 @@ import {
   setUserID,
 } from '../redux/actions/userActions';
 import axios from 'axios';
-import {logger} from '../utils/logger';
+import { logger } from '../utils/logger';
 
-const Login = ({email, student_id, isLoggedIn,isTeacher,userId, dispatch}) => {
-  
-React.useEffect(() => {
-  alert(userId)
-  if(isLoggedIn){
-    return Actions.home();
-  }
+const Login = ({ email, student_id, isLoggedIn, isTeacher, userId, dispatch }) => {
 
-}, []);
+  React.useEffect(() => {
+    alert(userId)
+    if (isLoggedIn) {
+      return Actions.home();
+    }
+
+  }, []);
 
   const login = () => {
     axios({
@@ -42,7 +42,7 @@ React.useEffect(() => {
       },
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
     }).then(function (response) {
       if (response.user_id != 0) {
@@ -56,34 +56,34 @@ React.useEffect(() => {
       }
     });
 
-    
+
   };
-  
+
 
   return (
     <Container>
-      <Header style={{backgroundColor: 'black'}}>
+      <Header style={{ backgroundColor: 'black' }}>
         <Body>
-          <Title style={{marginLeft: 70,alignSelf: 'center'}}>Reader</Title>
+          <Title style={{ marginLeft: 70, alignSelf: 'center' }}>Reader</Title>
         </Body>
       </Header>
 
       <Form>
         <FormItem
           floatingLabel
-          style={{marginLeft: 75, marginRight: 75, marginTop: 100}}>
+          style={{ marginLeft: 75, marginRight: 75, marginTop: 100 }}>
           <Label>SFSU Email Address</Label>
-          <Input onChangeText={(e) => dispatch(setEmail(e))} />
+          <Input autoCorrect={false} autoCapitalize="none" spellCheck={false} onChangeText={(e) => dispatch(setEmail(e))} />
         </FormItem>
-        <FormItem floatingLabel style={{marginLeft: 75, marginRight: 75}}>
+        <FormItem floatingLabel style={{ marginLeft: 75, marginRight: 75 }}>
           <Label>Student Id</Label>
-          <Input onChangeText={(e) => dispatch(setStudentId(e))} />
+          <Input autoCorrect={false} autoCapitalize="none" spellCheck={false} keyboardType="number-pad" onChangeText={(e) => dispatch(setStudentId(e))} />
         </FormItem>
 
         <Button
           rounded
           dark
-          style={{marginTop: 40, alignSelf: 'center'}}
+          style={{ marginTop: 40, alignSelf: 'center' }}
           onPress={() => login()}>
           <Text> Login </Text>
         </Button>
