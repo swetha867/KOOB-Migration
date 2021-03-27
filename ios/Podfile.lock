@@ -243,6 +243,8 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.6.0):
     - React-Core
+  - react-native-safe-area-context (3.2.0):
+    - React-Core
   - react-native-static-server (0.5.0):
     - GCDWebServer (~> 3.0)
     - React
@@ -375,6 +377,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-static-server (from `../node_modules/react-native-static-server`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -450,6 +453,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-document-picker"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
   react-native-static-server:
     :path: "../node_modules/react-native-static-server"
   react-native-webview:
@@ -525,6 +530,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-document-picker: ca0c8769c3848866970dc9164e809c6ea45cb5d6
   react-native-get-random-values: f0fc24a5887a3341589515a86282a574407b59e4
+  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-static-server: 201b2a945a35096be3ae7f43e367c65bcbd61343
   react-native-webview: 0aa2cde4ee7e3e1c5fffdf64dbce9c709aa18155
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
@@ -550,6 +556,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 8e9fd6f78b36dc35d68493376c8089bc6daddd67
+PODFILE CHECKSUM: ea130675e3ff0ab07a0144e2a2aa78e9bc6858d1
 
 COCOAPODS: 1.10.1

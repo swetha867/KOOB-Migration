@@ -33,9 +33,7 @@ export function fetchImages(word) {
   return function (dispatch) {
     return new Promise((resolve) => {
       axios({
-        url:
-          'https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=' +
-          'squares',
+        url: 'https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=' + 'squares',
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -48,14 +46,7 @@ export function fetchImages(word) {
     });
   };
 }
-export function fetchMeanings(
-  word,
-  user_id,
-  sentence,
-  paragraph,
-  book_name,
-  author_name,
-) {
+export function fetchMeanings(word, user_id, sentence, paragraph, book_name, author_name) {
   return function (dispatch) {
     return new Promise((resolve) => {
       axios({

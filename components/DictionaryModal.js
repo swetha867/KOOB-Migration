@@ -2,16 +2,7 @@ import React, {useState, useEffect} from 'react';
 // import {ListItem, Badge, Avatar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  StatusBar,
-  Button,
-} from 'react-native';
+import {View, Text, TouchableOpacity, SafeAreaView, StyleSheet, FlatList, StatusBar, Button} from 'react-native';
 import {Spinner} from 'native-base';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
@@ -43,16 +34,7 @@ function DictionaryModal({
     // alert(selected_word);
     // Tts.speak('selected_word');
     // alert(selected_word);
-    dispatch(
-      fetchMeanings(
-        'squares',
-        '20',
-        selected_sentence,
-        selected_paragraph,
-        book_name,
-        author_name,
-      ),
-    );
+    dispatch(fetchMeanings('squares', '20', selected_sentence, selected_paragraph, book_name, author_name));
     dispatch(fetchImages(selected_word));
     alert(wordImages);
     setModalVisible(true);

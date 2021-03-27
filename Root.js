@@ -5,14 +5,7 @@
  * @format
  * @flow strict-local
  */
-import {
-  ActionConst,
-  Lightbox,
-  Modal,
-  Scene,
-  Stack,
-  Router,
-} from 'react-native-router-flux';
+import {ActionConst, Lightbox, Modal, Scene, Stack, Router} from 'react-native-router-flux';
 import React from 'react';
 
 import Home from './pages/Home';
@@ -24,17 +17,13 @@ export default function Root() {
   return (
     <Router>
       <Stack key="root">
-      <Scene key="login" component={Login} title="Login" />
+        <Scene key="login" component={Login} title="Login" />
 
         <Scene key="home" component={Home} />
 
         <Scene key="learning" component={Learning} title="Learning" />
         <Scene key="reader" component={Reader} title="Reader" />
-        <Scene
-          key="dictionary"
-          component={DictionaryModal}
-          title="DictionaryModal"
-        />
+        <Scene key="dictionary" component={DictionaryModal} title="DictionaryModal" />
       </Stack>
     </Router>
   );

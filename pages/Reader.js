@@ -7,21 +7,8 @@
  */
 
 import React, {useRef, useState} from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  Platform,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-import {
-  Container,
-  Header,
-  Content,
-  Footer,
-  Title,
-  ActionSheet,
-} from 'native-base';
+import {Text, TouchableOpacity, Platform, useWindowDimensions, View} from 'react-native';
+import {Container, Header, Content, Footer, Title, ActionSheet} from 'native-base';
 import SideMenu from 'react-native-side-menu';
 import {Actions} from 'react-native-router-flux';
 
@@ -55,34 +42,23 @@ const config = {
   directionalOffsetThreshold: 80,
 };
 
-const Reader = ({
-  activeBookFileName,
-  selectedWord,
-  book_location,
-  dispatch,
-}) => {
+const Reader = ({activeBookFileName, selectedWord, book_location, dispatch}) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const [sliderValue, setSliderValue] = useState(1);
   const serverConfig = {localOnly: true, keepAlive: true};
   const [isDrawer, setDrawer] = useState(false);
-  const[locations,setLocations]=useState([]);
+  const [locations, setLocations] = useState([]);
   const webview = useRef();
 
   function startServer() {
-    let newServer = new StaticServer(
-      0,
-      `${RNFS.DocumentDirectoryPath}/${EPUB_IMPORT_LOCAL_DIR_NAME}`,
-      serverConfig,
-    );
+    let newServer = new StaticServer(0, `${RNFS.DocumentDirectoryPath}/${EPUB_IMPORT_LOCAL_DIR_NAME}`, serverConfig);
     newServer.start().then((url) => {
       const book_url = url + '/' + activeBookFileName;
       logger.debug(`Book should be available at ${book_url}`);
       setTimeout(() => {
         webview.current?.injectJavaScript(
-          `(function() {renderEpubFile("${book_url}",${windowWidth},${
-            windowHeight * 0.7
-          });})()`,
+          `(function() {renderEpubFile("${book_url}",${windowWidth},${windowHeight * 0.7});})()`,
         );
       }, 1000);
     });
@@ -96,15 +72,11 @@ const Reader = ({
   }, []);
 
   function goPrev() {
-    webview.current?.injectJavaScript(
-      `(function() {window.rendition.prev();})()`,
-    );
+    webview.current?.injectJavaScript('(function() {window.rendition.prev();})()');
   }
 
   function goNext() {
-    webview.current?.injectJavaScript(
-      `(function() {window.rendition.next();})()`,
-    );
+    webview.current?.injectJavaScript('(function() {window.rendition.next();})()');
   }
   function openDictionary() {
     //alert("selectedWord")
@@ -119,26 +91,26 @@ const Reader = ({
 
   function onMessage(e) {
     let parsedData = JSON.parse(e.nativeEvent.data);
-    let { type, selected, data } = parsedData;
-    console.log("selected:: ", selected);
-    console.log("data:: ", data);
+    let {type, selected, data} = parsedData;
+    console.log('selected:: ', selected);
+    console.log('data:: ', data);
     console.log(e.nativeEvent.data);
-		switch (type) {
-			case 'selected': {
+    switch (type) {
+      case 'selected': {
         dispatch(setSelectedWord(selected));
-			}
-			case 'loc': {
-			}
-			case 'key':
-			case 'metadata':{
+      }
+      case 'loc': {
+      }
+      case 'key':
+      case 'metadata': {
         dispatch(setAuthorName(parsedData.author));
         dispatch(setBookName(parsedData.title));
       }
-			case 'contents':
-			case 'locations':
-			default:
-				return;
-		}
+      case 'contents':
+      case 'locations':
+      default:
+        return;
+    }
   }
 
   let platform_independent_webview_source;
@@ -155,11 +127,7 @@ const Reader = ({
   }
   const contents = <Text>Content2 </Text>;
   return (
-    <SideMenu
-      menu={contents}
-      isOpen={isDrawer}
-      menuPosition="right"
-      onChange={setDrawer}>
+    <SideMenu menu={contents} isOpen={isDrawer} menuPosition="right" onChange={setDrawer}>
       <GestureRecognizer
         onSwipeLeft={goPrev}
         onSwipeRight={goNext}
@@ -167,11 +135,7 @@ const Reader = ({
         style={{
           flex: 1,
         }}>
-        <WebView
-          ref={webview}
-          source={platform_independent_webview_source}
-          onMessage={onMessage}
-        />
+        <WebView ref={webview} source={platform_independent_webview_source} onMessage={onMessage} />
       </GestureRecognizer>
       {/* {!_.isUndefined(selectedWord) && <DictionaryModal />} */}
       <Footer style={styles.wrapper}>
